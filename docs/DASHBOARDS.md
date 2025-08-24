@@ -1,6 +1,6 @@
 # infermesh Dashboards
 
-This document provides example PromQL queries and Grafana panel suggestions for monitoring an **infermesh** deployment.  
+This document provides example PromQL queries and Grafana panel suggestions for monitoring an **InferMesh** deployment.  
 The focus is on GPU utilization, runtime metrics, request latency, and overall fleet health.
 
 ---

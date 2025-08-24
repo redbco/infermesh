@@ -1,12 +1,12 @@
 # Development Roadmap - infermesh Open Source
 
-This document outlines the development roadmap for **infermesh** as it transitions to open source. The project has successfully completed all four planned implementation phases and is ready for community-driven development.
+This document outlines the development roadmap for **InferMesh** as it transitions to open source. The project has successfully completed all four planned implementation phases and is ready for community-driven development.
 
 ---
 
 ## 🎉 Current Status
 
-The current status of **infermesh** is:
+The current status of **InferMesh** is:
 
 - ✅ **100% Compilation Success**: All 13 crates compile without errors
 - ✅ **Complete Architecture**: 3-plane design (Data, Signal, Control) fully implemented
@@ -269,7 +269,7 @@ The codebase represents a **production-ready GPU-aware inference mesh** with onl
 
 ## 🎯 Key Differentiators
 
-**infermesh** stands out in the AI infrastructure landscape through:
+**InferMesh** stands out in the AI infrastructure landscape through:
 
 1. **GPU-Aware Intelligence**: Real-time GPU telemetry integration for optimal routing
 2. **Production-Ready Architecture**: Complete 3-plane design with fault tolerance
@@ -291,4 +291,4 @@ The codebase represents a **production-ready GPU-aware inference mesh** with onl
 
 ---
 
-**infermesh** is positioned to become the leading open source solution for GPU-aware AI inference at scale. The solid foundation, comprehensive feature set, and clear roadmap provide an excellent foundation for community-driven development and enterprise adoption.
+**InferMesh** is positioned to become the leading open source solution for GPU-aware AI inference at scale. The solid foundation, comprehensive feature set, and clear roadmap provide an excellent foundation for community-driven development and enterprise adoption.

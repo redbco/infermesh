@@ -1,22 +1,18 @@
-# infermesh
+# InferMesh
 
-**infermesh** is a **GPU-aware inference mesh** designed for large-scale AI serving.  
+**InferMesh** is a **GPU-aware inference mesh** designed for large-scale AI serving.  
 It provides a distributed control plane, GPU- and network-aware routing, and standardized observability across heterogeneous environments.
-
-> **Status**: Production-ready with comprehensive runtime adapter support (Triton, vLLM, TGI) and GPU telemetry (NVML, DCGM). All 13 crates compile successfully with full end-to-end functionality.
-
-> Built and maintained by [redbco](https://github.com/redbco). Licensed under **AGPLv3**.
 
 ---
 
-## ✨ What is infermesh?
+## ✨ What is InferMesh?
 
 Modern AI inference at scale faces two hard problems:
 
 1. **Observability** – understanding GPU health, utilization, queue depths, and tail latency across a large fleet.
 2. **Utilization** – squeezing maximum throughput out of expensive GPUs without breaking SLAs.
 
-**infermesh** solves this by introducing a *mesh abstraction layer* above Kubernetes, Slurm, or bare metal.  
+**InferMesh** solves this by introducing a *mesh abstraction layer* above Kubernetes, Slurm, or bare metal.  
 It coordinates nodes, routes requests based on live GPU + network state, and exposes a distributed API for control and monitoring.
 
 ---
@@ -226,7 +222,7 @@ We use GitHub Issues + Discussions for bugs, features, and design proposals.
 
 ## 📜 License
 
-**infermesh** is available under a **dual-license model**:
+**InferMesh** is available under a **dual-license model**:
 
 ### Open Source License (AGPLv3)
 The open source version of infermesh is licensed under the **GNU Affero General Public License v3.0 (AGPLv3)**. This means:
@@ -244,7 +240,7 @@ For organizations that cannot comply with AGPLv3 requirements, **reDB** offers c
 - ✅ Enterprise support and consulting
 - ✅ Custom licensing terms for specific use cases
 
-**Contact**: For commercial licensing inquiries, please contact [licensing@redb.co](mailto:licensing@redb.co)
+**Contact**: For commercial licensing inquiries, please contact [redb@redb.co](mailto:redb@redb.co)
 
 See [COMMERCIAL-LICENSE.md](COMMERCIAL-LICENSE.md) for more details.
 
@@ -254,3 +250,7 @@ Inference infrastructure is rapidly becoming a shared pain point. By making infe
 - Build a common standard for GPU-aware metrics and routing
 - Foster collaboration across research labs, startups, and enterprises
 - Provide transparency for critical infrastructure in AI deployment
+
+> **Status**: Ready with comprehensive runtime adapter support (Triton, vLLM, TGI) and GPU telemetry (NVML, DCGM). All 13 crates compile successfully with full end-to-end functionality.
+
+> Built and maintained by [tommihip](https://github.com/tommihip) and [reDB](https://github.com/redbco). Licensed under **AGPLv3**.

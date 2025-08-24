@@ -1,6 +1,6 @@
 # Crates Overview – infermesh
 
-This document provides an in-depth description of each crate in the **infermesh** repository.  
+This document provides an in-depth description of each crate in the **InferMesh** repository.  
 It complements the shorter overview in the [README.md](../README.md).
 
 ---
@@ -207,7 +207,7 @@ infermesh/
 
 ## Crate Connectivity Diagram
 
-The following Mermaid diagram shows how the crates in **infermesh** connect to each other and to external runtimes, GPUs, and observability systems.
+The following Mermaid diagram shows how the crates in **InferMesh** connect to each other and to external runtimes, GPUs, and observability systems.
 
 ```mermaid
 graph TD

@@ -1,6 +1,6 @@
 # Getting Started with infermesh
 
-This guide helps you build, run, and experiment with **infermesh** locally. It covers both mock deployments for testing and real GPU deployments.
+This guide helps you build, run, and experiment with **InferMesh** locally. It covers both mock deployments for testing and real GPU deployments.
 
 ---
 
@@ -254,4 +254,4 @@ cargo run -p mesh-cli -- stats --json
 
 ---
 
-Happy hacking with **infermesh** 🚀
+Happy hacking with **InferMesh** 🚀

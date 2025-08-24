@@ -1,6 +1,6 @@
 # Contributing to infermesh
 
-🎉 First of all, thank you for your interest in contributing to **infermesh**!  
+🎉 First of all, thank you for your interest in contributing to **InferMesh**!  
 We welcome contributions of all kinds: code, documentation, design proposals, and community support.
 
 ---
@@ -122,4 +122,4 @@ feat(router): add hedged requests for p99 tail latency
 
 ---
 
-Thanks again for helping improve **infermesh** 💜
+Thanks again for helping improve **InferMesh** 💜

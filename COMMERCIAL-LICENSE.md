@@ -1,6 +1,6 @@
 # Commercial License for infermesh
 
-**infermesh** is available under a dual-license model. While the open source version is licensed under AGPLv3, **reDB** also offers commercial licensing for organizations that require proprietary use.
+**InferMesh** is available under a dual-license model. While the open source version is licensed under AGPLv3, **reDB** also offers commercial licensing for organizations that require proprietary use.
 
 ---
 

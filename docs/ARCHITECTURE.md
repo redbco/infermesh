@@ -1,6 +1,6 @@
 # infermesh Architecture
 
-This document provides a detailed description of the **infermesh** architecture, its components, and the interfaces used across the system.
+This document provides a detailed description of the **InferMesh** architecture, its components, and the interfaces used across the system.
 
 ---
 
