@@ -118,6 +118,9 @@ The project includes a comprehensive Makefile for common development tasks:
 # Show all available targets
 make help
 
+# Create example configurations
+make examples
+
 # Development setup (check + test + build)
 make dev
 
