@@ -15,7 +15,80 @@ The mesh is composed of three cooperating planes:
 2. **Signal Plane** – Collects runtime and GPU telemetry, fuses state, and provides scoring APIs.  
 3. **Control Plane** – Maintains policies, placements, and exposes a distributed management API.
 
-![Architecture Diagram](assets/architecture.png) <!-- placeholder for your diagram -->
+### System Architecture (Mermaid)
+
+```mermaid
+flowchart LR
+  %% Styles
+  classDef plane fill:#f8f9fb,stroke:#d0d7de,stroke-width:1px,color:#333;
+  classDef core fill:#eef6ff,stroke:#84a9ff,stroke-width:1px,color:#0b2e66;
+  classDef adapter fill:#eefcf4,stroke:#8fd19e,stroke-width:1px,color:#145c2e;
+  classDef external fill:#fff7e6,stroke:#f0b429,stroke-width:1px,color:#6a3d00;
+  classDef runtime fill:#f7ecff,stroke:#c69cf2,stroke-width:1px,color:#442266;
+
+  %% Clients & Ingress
+  subgraph Clients/Ingress
+    C[Clients / SDKs / Services]
+    R[mesh-router<br/>HTTP/2 gRPC, HTTP, WS/SSE]:::core
+    C -->|"HTTP/2 gRPC / HTTP (streaming)"| R
+  end
+
+  %% Node (generic)
+  subgraph Node (any role)
+    direction TB
+    A[mesh-agent (meshd)<br/>/metrics + OTLP]:::core
+    S[State Fusion & Scoring API<br/>ScoreTargets/Admit/ReportOutcome]:::core
+    G[mesh-gossip (SWIM)]:::core
+    RF[mesh-raft (policies/placements/ACLs)]:::core
+
+    subgraph GPU Node Internals
+      direction TB
+      RA[Runtime Adapter<br/>(Triton/vLLM/TGI/...)]:::adapter
+      GA[GPU Telemetry Adapter<br/>(DCGM/NVML)]:::adapter
+      RT[Model Runtime<br/>(Triton / vLLM / TGI / TorchServe / TF Serving / OVMS)]:::runtime
+      GPU[GPU(s) + MIG/MPS]:::runtime
+      DCGM[DCGM / NVML]:::runtime
+      RA -->|"ControlModel (load/unload/warm)"| RT
+      RA -->|"/metrics (Prometheus)"| RT
+      GA -->|"util/mem/ECC/MIG"| DCGM
+      DCGM --> GA
+    end
+
+    A --> S
+    A --> G
+    A --> RF
+    RA -->|"gRPC stream: ModelStateDelta"| A
+    GA -->|"gRPC stream: GpuStateDelta"| A
+  end
+
+  %% Router <-> Agent hot path
+  R -->|"UDS/TCP gRPC: ScoreTargets/Admit"| A
+
+  %% Optional external sinks
+  subgraph Observability (optional)
+    P[Prometheus / Grafana]:::external
+    OT[OpenTelemetry Collector]:::external
+  end
+  A -->|"/metrics"| P
+  R -->|"/metrics"| P
+  RA -->|"/metrics"| P
+  GA -->|"/metrics"| P
+  A -->|"OTLP (traces/logs/metrics)"| OT
+  R -->|"OTLP (traces)"| OT
+
+  %% Control-plane clients
+  subgraph Admin/Automation
+    CLI[mesh-cli / CI/CD]:::external
+    CLI -->|"gRPC (mTLS), SetPolicy/PinModel/DrainNode/SubscribeEvents"| A
+  end
+
+  %% Gossip and Raft peerings (shown abstractly)
+  G <-->|"SWIM gossip (UDP/TCP)"| G
+  RF <-->|"Raft (gRPC/TCP)"| RF
+```
+
+> **Legend**: Blue = core mesh processes, Green = adapters, Purple = runtimes/GPUs, Yellow = external sinks.  
+> **Line styles**: Solid = data/control RPC; labeled with protocol. Dashed peerings show cluster-wide relationships (gossip/raft).
 
 ---
 
@@ -79,22 +152,45 @@ Every node runs a **mesh agent (`meshd`)**. Nodes can be configured with specifi
 | Membership | Gossip (UDP/TCP) | SWIM-style protocol |
 | Consensus | gRPC over TCP | Raft (tikv/raft) |
 
+> **Label schema** (applies to all metrics/traces):  
+> `model, revision, quant, runtime, node, gpu_uuid, mig_profile, tenant, zone`
+
 ---
 
 ## Data Flow (Example: LLM Request)
 
-1. Client sends a request (e.g., generate tokens) → Router.  
-2. Router queries local meshd → `ScoreTargets` with model, SLA, tokens.  
-3. meshd returns ranked GPU nodes, factoring:  
-   - queue depth / service rate  
-   - VRAM pressure  
-   - MIG compatibility  
-   - recent p95 latency  
-   - network RTT/bandwidth cost  
-4. Router forwards to best candidate; schedules a hedge if latency budget is exceeded.  
-5. GPU node executes via runtime (Triton/vLLM/TGI) and streams results back.  
-6. Router reports outcome to meshd → metrics updated → gossip distributes state.  
-7. Prometheus/Grafana/OTel collectors can scrape/export metrics externally.
+```mermaid
+sequenceDiagram
+  autonumber
+  participant C as Client
+  participant R as mesh-router
+  participant A as mesh-agent (local)
+  participant RA as Runtime Adapter
+  participant RT as Model Runtime
+  participant GA as GPU Adapter
+  participant GPU as GPU/DCGM
+
+  C->>R: Inference request (model, SLA, input hint)
+  R->>A: ScoreTargets(RequestCtx)
+  A->>A: Compute scores (work_left, VRAM, MIG, p95, net_penalty)
+  A-->>R: Ranked targets + admit token
+  R->>RT: Forward request (to chosen GPU node)
+  RT->>GPU: Run inference (batching/concurrency)
+  GPU-->>GA: Telemetry update (util/mem/ECC)
+  GA-->>A: GpuStateDelta
+  RT-->>RA: /metrics (queue depth, tokens/s, p95)
+  RA-->>A: ModelStateDelta
+  RT-->>R: Streamed response
+  R-->>C: Streamed output
+  R->>A: ReportOutcome(latency, success)
+```
+
+**Scoring inputs**:  
+- `work_left = queue_depth / service_rate`  
+- `vram_headroom = vram_total - vram_used`  
+- MIG compatibility & recent `p95` latency  
+- `net_penalty` (RTT + bandwidth model)  
+- `cold_penalty` (weights/KV-cache load risk)
 
 ---
 

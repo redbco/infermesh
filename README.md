@@ -77,8 +77,6 @@ The mesh consists of three cooperating layers:
 - **Signal Plane** – agents collect runtime and GPU metrics, gossip them, and provide a local scoring API.  
 - **Control Plane** – strongly consistent policies (model pinning, SLO classes, quotas) managed via Raft and exposed as a gRPC/HTTP API.
 
-![Architecture Diagram](docs/assets/architecture.png) <!-- placeholder; you can add -->
-
 Read more in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ---
@@ -95,6 +93,11 @@ Read more in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 ```bash
 git clone https://github.com/redbco/infermesh.git
 cd infermesh
+
+# Using Makefile (recommended)
+make build
+
+# Or using cargo directly
 cargo build --release
 ```
 
@@ -110,6 +113,37 @@ cargo run -p mesh-cli -- list-nodes
 
 # Check metrics
 curl http://127.0.0.1:9090/metrics
+```
+
+### Development Workflow
+The project includes a comprehensive Makefile for common development tasks:
+
+```bash
+# Show all available targets
+make help
+
+# Development setup (check + test + build)
+make dev
+
+# Quick development check (format + lint + test)
+make quick
+
+# Build specific components
+make build-agent    # Build mesh agent only
+make build-cli      # Build CLI only
+
+# Testing
+make test           # Run all tests
+make test-unit      # Run unit tests only
+
+# Code quality
+make fmt            # Format code
+make clippy         # Run linter
+make doc            # Generate documentation
+
+# Release preparation
+make release-check  # Verify ready for release
+make release-build  # Build release artifacts
 ```
 
 ### Multi-Node Setup

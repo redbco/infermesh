@@ -15,3 +15,50 @@ target/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+# infermesh specific ignores
+
+# Generated examples and temporary files
+examples/
+dist/
+
+# Development and testing artifacts
+*.log
+*.pid
+*.sock
+*.tmp
+
+# Configuration files that might contain secrets
+config/local.yaml
+config/dev.yaml
+config/*.local.yaml
+*.secret.yaml
+
+# Runtime data directories
+data/
+logs/
+tmp/
+
+# Docker build context
+.dockerignore
+
+# macOS
+.DS_Store
+
+# Editor files
+.vscode/
+*.swp
+*.swo
+*~
+
+# Temporary files from development tools
+.cargo-ok
+flamegraph.svg
+perf.data*
+
+# Generated documentation (can be regenerated)
+doc/
+
+# Benchmark results
+criterion/
+benches/results/
