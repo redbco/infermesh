@@ -220,7 +220,7 @@ end
 
 %% === Node Composition ===
 subgraph Node
-  MR -->|ScoreTargets / Admit / ReportOutcome (gRPC UDS)| AG
+  MR -->|ScoreTargets / Admit / ReportOutcome gRPC UDS| AG
   AG --> MS[mesh-state]
   AG --> MG[mesh-gossip]
   AG --> MRft[mesh-raft]
@@ -229,7 +229,7 @@ subgraph Node
 end
 
 %% === Runtimes / GPU Telemetry ===
-RAD -->|ControlModel (load/unload/warm)| RUNTIME[(Runtimes: Triton / vLLM / TGI / TorchServe / TF Serving / OVMS)]
+RAD -->|ControlModel load/unload/warm| RUNTIME[(Runtimes: Triton / vLLM / TGI / TorchServe / TF Serving / OVMS)]
 RAD -->|Scrape /metrics| RUNTIME
 GAD -->|DCGM / NVML| DCGM[(GPU + Driver: DCGM/NVML)]
 
