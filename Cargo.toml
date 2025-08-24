@@ -1,0 +1,91 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/mesh-core",
+    "crates/mesh-proto",
+    "crates/mesh-metrics",
+    # "crates/mesh-dev", # Temporarily disabled due to client generation issue
+    "crates/mesh-agent",
+    "crates/mesh-gossip",
+    "crates/mesh-state",
+    "crates/mesh-net",
+    "crates/mesh-router",
+    "crates/mesh-raft",
+    "crates/mesh-cli",
+    "crates/mesh-adapter-runtime",
+    "crates/mesh-adapter-gpu",
+    # TODO: Add other crates as they are implemented
+]
+
+[workspace.package]
+version = "0.1.0"
+authors = ["reDB <redb@redb.co>"]
+license = "AGPL-3.0-or-later OR LicenseRef-Commercial"
+repository = "https://github.com/redbco/infermesh"
+homepage = "https://redb.co"
+description = "GPU-aware inference mesh for large-scale AI serving"
+keywords = ["ai", "inference", "gpu", "distributed", "mesh"]
+categories = ["network-programming", "web-programming::http-server"]
+edition = "2021"
+rust-version = "1.70"
+
+[workspace.dependencies]
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "signal", "tracing"] }
+tokio-stream = { version = "0.1", features = ["sync"] }
+hyper = { version = "1", features = ["http1", "http2", "server"] }
+axum = "0.7"
+tonic = { version = "0.12", features = ["tls", "gzip"] }
+prost = "0.13"
+prost-types = "0.13"
+tonic-build = "0.12"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt", "json"] }
+opentelemetry = { version = "0.23", features = ["metrics", "trace"] }
+opentelemetry-otlp = { version = "0.17", features = ["grpc-tonic", "metrics", "trace"] }
+prometheus = "0.13"
+metrics = "0.22"
+metrics-exporter-prometheus = "0.13"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_yaml = "0.9"
+config = "0.14"
+anyhow = "1"
+thiserror = "1"
+parking_lot = "0.12"
+bytes = "1"
+dashmap = "6"
+smallvec = "1"
+arc-swap = "1"
+rustls = "0.23"
+rustls-pemfile = "2"
+ring = "0.17"
+tikv-raft = "0.7"
+tempfile = "3"
+quinn = "0.11"
+pprof = { version = "0.13", features = ["flamegraph"] }
+async-trait = "0.1"
+uuid = { version = "1.0", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+prost-build = "0.13"
+tonic-reflection = "0.12"
+bincode = "1.3"
+base64 = "0.22"
+# Added for mesh-router
+tower = { version = "0.4", features = ["util", "timeout", "load-shed", "limit"] }
+tower-http = { version = "0.5", features = ["cors", "trace", "compression-gzip"] }
+clap = { version = "4.0", features = ["derive"] }
+futures = "0.3"
+reqwest = { version = "0.12", features = ["json", "stream"] }
+rand = "0.8"
+md5 = "0.7"
+# Added for mesh-cli
+console = "0.15"
+indicatif = "0.17"
+comfy-table = "7.0"
+colored = "2.0"
+dirs = "5.0"
+# Added for mesh-adapter-runtime
+url = "2.5"
+nix = { version = "0.29", features = ["signal", "process"] }
+hyper-util = { version = "0.1", features = ["client-legacy", "http1", "http2"] }
+http-body-util = "0.1"

@@ -1,0 +1,54 @@
+[package]
+name = "mesh-state"
+version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "State management and routing intelligence for infermesh"
+keywords.workspace = true
+categories.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+# Core dependencies
+mesh-core = { path = "../mesh-core" }
+mesh-proto = { path = "../mesh-proto" }
+mesh-gossip = { path = "../mesh-gossip" }
+
+# Async runtime
+tokio = { workspace = true, features = ["macros", "rt-multi-thread", "time", "sync"] }
+async-trait = { workspace = true }
+
+# Data structures
+dashmap = { workspace = true }
+arc-swap = { workspace = true }
+
+# Serialization
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+
+# Utilities
+chrono = { workspace = true }
+uuid = { workspace = true }
+rand = "0.8"
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Tracing
+tracing = { workspace = true }
+
+# Metrics
+prometheus = { workspace = true }
+
+[dev-dependencies]
+tokio-test = "0.4"
+tempfile = { workspace = true }
+
+[features]
+default = []
+# Enable advanced scoring algorithms
+advanced-scoring = []

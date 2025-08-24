@@ -1,0 +1,76 @@
+[package]
+name = "mesh-router"
+version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "HTTP/gRPC ingress and request routing for infermesh"
+keywords.workspace = true
+categories.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "mesh-router"
+path = "src/bin/mesh-router.rs"
+
+[dependencies]
+# Core dependencies
+mesh-core = { path = "../mesh-core" }
+mesh-proto = { path = "../mesh-proto" }
+mesh-state = { path = "../mesh-state" }
+mesh-net = { path = "../mesh-net" }
+
+# Async runtime
+tokio = { workspace = true, features = ["macros", "rt-multi-thread", "net", "time", "sync", "signal", "fs"] }
+tokio-stream = { workspace = true }
+async-trait = { workspace = true }
+
+# HTTP/gRPC server
+axum = { workspace = true, features = ["ws", "multipart"] }
+hyper = { workspace = true, features = ["server", "http1", "http2"] }
+hyper-util = { version = "0.1", features = ["client-legacy", "http1", "http2"] }
+http-body-util = "0.1"
+tonic = { workspace = true, features = ["server"] }
+tonic-reflection = { workspace = true, optional = true }
+tower = { version = "0.4", features = ["util", "timeout", "load-shed", "limit"] }
+tower-http = { version = "0.5", features = ["cors", "trace", "compression-gzip"] }
+
+# Serialization
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+
+# Configuration
+config = { workspace = true }
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Tracing and metrics
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+metrics = { workspace = true }
+
+# Utilities
+uuid = { workspace = true }
+chrono = { workspace = true }
+bytes = { workspace = true }
+futures = "0.3"
+clap = { workspace = true }
+
+# Networking
+reqwest = { version = "0.12", features = ["json", "stream"] }
+rand = { workspace = true }
+
+[dev-dependencies]
+tokio-test = "0.4"
+tempfile = { workspace = true }
+
+[features]
+default = []
+# Enable WebSocket support
+websocket = []
+# Enable gRPC reflection
+reflection = ["tonic-reflection"]

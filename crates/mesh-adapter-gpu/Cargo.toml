@@ -1,0 +1,66 @@
+[package]
+name = "mesh-adapter-gpu"
+version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "GPU telemetry and monitoring adapters (DCGM, NVML, MIG)"
+keywords.workspace = true
+categories.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+# Core dependencies
+mesh-core = { path = "../mesh-core" }
+
+# Async runtime
+tokio = { workspace = true, features = ["macros", "rt-multi-thread", "time", "sync", "fs", "process"] }
+async-trait = { workspace = true }
+
+# Serialization
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+
+# Configuration
+config = { workspace = true }
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Logging and metrics
+tracing = { workspace = true }
+metrics = { workspace = true }
+
+# Utilities
+uuid = { workspace = true }
+chrono = { workspace = true, features = ["serde"] }
+bytes = { workspace = true }
+
+# System interaction
+nix = { workspace = true }
+
+# Optional NVML bindings (would use nvml-wrapper in real implementation)
+# nvml-wrapper = { version = "0.9", optional = true }
+
+[dev-dependencies]
+tokio-test = "0.4"
+tempfile = { workspace = true }
+
+[features]
+default = ["nvml", "dcgm"]
+
+# GPU monitoring backends
+nvml = []
+dcgm = []
+rocm = []
+
+# Development features
+mock = []
+test-utils = []
+
+[build-dependencies]
+# Would use bindgen for DCGM C bindings in real implementation
+# bindgen = "0.69"

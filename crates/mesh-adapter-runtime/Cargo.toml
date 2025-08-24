@@ -1,0 +1,78 @@
+[package]
+name = "mesh-adapter-runtime"
+version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "Runtime adapters for ML inference engines (Triton, vLLM, TGI, TorchServe)"
+keywords.workspace = true
+categories.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+# Core dependencies
+mesh-core = { path = "../mesh-core" }
+mesh-proto = { path = "../mesh-proto" }
+
+# Async runtime
+tokio = { workspace = true, features = ["macros", "rt-multi-thread", "net", "time", "sync", "fs", "io-util", "process"] }
+async-trait = { workspace = true }
+
+# HTTP client for REST APIs
+reqwest = { workspace = true }
+hyper = { workspace = true }
+hyper-util = { workspace = true, features = ["client-legacy", "http1", "http2"] }
+http-body-util = { workspace = true }
+
+# gRPC client for Triton
+tonic = { workspace = true }
+prost = { workspace = true }
+
+# Serialization
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+
+# Configuration
+config = { workspace = true }
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Logging and metrics
+tracing = { workspace = true }
+metrics = { workspace = true }
+
+# Utilities
+uuid = { workspace = true }
+base64 = { workspace = true }
+chrono = { workspace = true, features = ["serde"] }
+bytes = { workspace = true }
+futures = { workspace = true }
+
+# URL parsing
+url = "2.5"
+
+# Process management
+nix = { workspace = true }
+
+[dev-dependencies]
+tokio-test = "0.4"
+tempfile = { workspace = true }
+wiremock = "0.6"
+
+[features]
+default = ["triton", "vllm", "tgi"]
+
+# Runtime adapters
+triton = []
+vllm = []
+tgi = []
+torchserve = []
+tensorflow-serving = []
+
+# Development features
+mock = []
+test-utils = []

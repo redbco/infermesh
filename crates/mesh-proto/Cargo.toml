@@ -1,0 +1,51 @@
+[package]
+name = "mesh-proto"
+version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "Protocol buffer definitions and generated gRPC bindings for infermesh"
+keywords.workspace = true
+categories.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+# gRPC and protobuf
+tonic = { workspace = true }
+prost = { workspace = true }
+prost-types = { workspace = true }
+
+# Serialization
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+
+# Async runtime
+tokio = { workspace = true, features = ["macros"] }
+
+# Utilities
+chrono = { workspace = true, features = ["serde"] }
+uuid = { workspace = true }
+
+# Error handling
+thiserror = { workspace = true }
+
+# Core types
+mesh-core = { path = "../mesh-core" }
+
+[build-dependencies]
+tonic-build = { workspace = true }
+prost-build = "0.13"
+
+[dev-dependencies]
+tokio-test = "0.4"
+
+[features]
+default = []
+# Enable reflection for development
+reflection = ["tonic-reflection"]
+
+[dependencies.tonic-reflection]
+version = "0.12"
+optional = true

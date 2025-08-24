@@ -1,0 +1,60 @@
+[package]
+name = "mesh-dev"
+version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "Development and testing utilities for infermesh"
+keywords.workspace = true
+categories.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+# Core dependencies
+mesh-core = { path = "../mesh-core" }
+mesh-proto = { path = "../mesh-proto" }
+mesh-metrics = { path = "../mesh-metrics" }
+
+# Async runtime
+tokio = { workspace = true, features = ["macros", "rt-multi-thread", "time", "sync", "process"] }
+async-trait = { workspace = true }
+
+# gRPC and networking
+tonic = { workspace = true }
+hyper = { workspace = true }
+
+# Serialization
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+serde_yaml = { workspace = true }
+
+# Configuration
+config = { workspace = true }
+
+# Utilities
+chrono = { workspace = true }
+uuid = { workspace = true }
+rand = "0.8"
+rand_distr = "0.4"
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Tracing
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+# Testing utilities
+tempfile = { workspace = true }
+futures = "0.3"
+
+[dev-dependencies]
+tokio-test = "0.4"
+
+[features]
+default = []
+# Enable all mock implementations
+full-mocks = []

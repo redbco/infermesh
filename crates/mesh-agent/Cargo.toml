@@ -1,0 +1,83 @@
+[package]
+name = "mesh-agent"
+version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "Node agent (meshd daemon) for infermesh"
+keywords.workspace = true
+categories.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+# Core dependencies
+mesh-core = { path = "../mesh-core" }
+mesh-proto = { path = "../mesh-proto" }
+mesh-metrics = { path = "../mesh-metrics" }
+mesh-raft = { path = "../mesh-raft" }
+
+# Adapter dependencies
+mesh-adapter-runtime = { path = "../mesh-adapter-runtime" }
+mesh-adapter-gpu = { path = "../mesh-adapter-gpu" }
+
+# State and gossip dependencies
+mesh-state = { path = "../mesh-state" }
+mesh-gossip = { path = "../mesh-gossip" }
+
+# Router dependency
+mesh-router = { path = "../mesh-router" }
+
+# Development dependencies (optional)
+# mesh-dev = { path = "../mesh-dev", optional = true } # Temporarily disabled
+
+# Async runtime
+tokio = { workspace = true, features = ["macros", "rt-multi-thread", "signal", "process"] }
+async-trait = { workspace = true }
+
+# gRPC and networking
+tonic = { workspace = true }
+hyper = { workspace = true }
+tokio-stream = { workspace = true }
+
+# Serialization
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+serde_yaml = { workspace = true }
+
+# Configuration
+config = { workspace = true }
+
+# Utilities
+chrono = { workspace = true }
+uuid = { workspace = true, features = ["v4"] }
+rand = "0.8"
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Tracing
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true, features = ["env-filter", "fmt", "json"] }
+
+# CLI
+clap = { version = "4.0", features = ["derive", "env"] }
+
+# Unix signal handling
+[target.'cfg(unix)'.dependencies]
+nix = { version = "0.27", features = ["signal"] }
+
+[dev-dependencies]
+tokio-test = "0.4"
+tempfile = { workspace = true }
+
+[features]
+default = []
+# Enable development/testing features
+# dev = ["dep:mesh-dev"] # Temporarily disabled
+
+[[bin]]
+name = "meshd"
+path = "src/bin/meshd.rs"

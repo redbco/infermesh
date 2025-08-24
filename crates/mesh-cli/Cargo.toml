@@ -1,0 +1,71 @@
+[package]
+name = "mesh-cli"
+version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "Command-line interface for infermesh control plane"
+keywords.workspace = true
+categories.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "mesh"
+path = "src/main.rs"
+
+[dependencies]
+# Core dependencies
+mesh-core = { path = "../mesh-core" }
+mesh-proto = { path = "../mesh-proto" }
+
+# CLI framework
+clap = { workspace = true }
+
+# gRPC client
+tonic = { workspace = true }
+tokio = { workspace = true, features = ["macros", "rt-multi-thread", "net", "time"] }
+
+# Serialization
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+serde_yaml = { workspace = true }
+
+# Configuration
+config = { workspace = true }
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true, features = ["env-filter", "json"] }
+
+# Utilities
+uuid = { workspace = true }
+chrono = { workspace = true, features = ["serde"] }
+
+# Terminal UI
+console = { workspace = true }
+indicatif = { workspace = true }
+comfy-table = { workspace = true }
+colored = { workspace = true }
+
+# HTTP client for REST API
+reqwest = { workspace = true }
+
+# System utilities
+dirs = { workspace = true }
+
+[dev-dependencies]
+tokio-test = "0.4"
+tempfile = { workspace = true }
+
+[features]
+default = []
+# Enable JSON output formatting
+json = []
+# Enable verbose logging
+verbose = []

@@ -1,0 +1,253 @@
+syntax = "proto3";
+
+package infermesh.control.v1;
+
+import "google/protobuf/timestamp.proto";
+//import "google/protobuf/empty.proto";
+
+// Control Plane service for managing the mesh
+service ControlPlane {
+  // Node management
+  rpc ListNodes(ListNodesRequest) returns (ListNodesResponse);
+  rpc GetNode(GetNodeRequest) returns (GetNodeResponse);
+  rpc DrainNode(DrainNodeRequest) returns (DrainNodeResponse);
+  
+  // Model management
+  rpc ListModels(ListModelsRequest) returns (ListModelsResponse);
+  rpc PinModel(PinModelRequest) returns (PinModelResponse);
+  rpc UnpinModel(UnpinModelRequest) returns (UnpinModelResponse);
+  rpc LoadModel(LoadModelRequest) returns (LoadModelResponse);
+  rpc UnloadModel(UnloadModelRequest) returns (UnloadModelResponse);
+  
+  // Policy management
+  rpc SetPolicy(SetPolicyRequest) returns (SetPolicyResponse);
+  rpc GetPolicy(GetPolicyRequest) returns (GetPolicyResponse);
+  rpc DeletePolicy(DeletePolicyRequest) returns (DeletePolicyResponse);
+  rpc ListPolicies(ListPoliciesRequest) returns (ListPoliciesResponse);
+  
+  // Event streaming
+  rpc SubscribeEvents(SubscribeEventsRequest) returns (stream Event);
+}
+
+// Node information
+message Node {
+  string id = 1;
+  repeated NodeRole roles = 2;
+  string zone = 3;
+  map<string, string> labels = 4;
+  NodeStatus status = 5;
+  google.protobuf.Timestamp last_seen = 6;
+  string version = 7;
+}
+
+enum NodeRole {
+  NODE_ROLE_UNSPECIFIED = 0;
+  NODE_ROLE_ROUTER = 1;
+  NODE_ROLE_GPU = 2;
+  NODE_ROLE_EDGE = 3;
+}
+
+enum NodeStatus {
+  NODE_STATUS_UNSPECIFIED = 0;
+  NODE_STATUS_HEALTHY = 1;
+  NODE_STATUS_UNHEALTHY = 2;
+  NODE_STATUS_DRAINING = 3;
+  NODE_STATUS_OFFLINE = 4;
+}
+
+// Model information
+message Model {
+  string name = 1;
+  string revision = 2;
+  string runtime = 3;
+  ModelStatus status = 4;
+  repeated string pinned_nodes = 5;
+  map<string, string> config = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+enum ModelStatus {
+  MODEL_STATUS_UNSPECIFIED = 0;
+  MODEL_STATUS_AVAILABLE = 1;
+  MODEL_STATUS_LOADING = 2;
+  MODEL_STATUS_LOADED = 3;
+  MODEL_STATUS_FAILED = 4;
+  MODEL_STATUS_UNLOADING = 5;
+}
+
+// Policy information
+message Policy {
+  string name = 1;
+  PolicyType type = 2;
+  map<string, string> config = 3;
+  repeated string target_nodes = 4;
+  repeated string target_models = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+}
+
+enum PolicyType {
+  POLICY_TYPE_UNSPECIFIED = 0;
+  POLICY_TYPE_PLACEMENT = 1;
+  POLICY_TYPE_QUOTA = 2;
+  POLICY_TYPE_SLO = 3;
+  POLICY_TYPE_SECURITY = 4;
+}
+
+// Request/Response messages for ListNodes
+message ListNodesRequest {
+  // Optional filters
+  repeated NodeRole role_filter = 1;
+  string zone_filter = 2;
+  map<string, string> label_filter = 3;
+}
+
+message ListNodesResponse {
+  repeated Node nodes = 1;
+}
+
+// Request/Response messages for GetNode
+message GetNodeRequest {
+  string node_id = 1;
+}
+
+message GetNodeResponse {
+  Node node = 1;
+}
+
+// Request/Response messages for DrainNode
+message DrainNodeRequest {
+  string node_id = 1;
+  bool force = 2;
+  int32 timeout_seconds = 3;
+}
+
+message DrainNodeResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// Request/Response messages for ListModels
+message ListModelsRequest {
+  string name_filter = 1;
+  string runtime_filter = 2;
+  repeated ModelStatus status_filter = 3;
+}
+
+message ListModelsResponse {
+  repeated Model models = 1;
+}
+
+// Request/Response messages for PinModel
+message PinModelRequest {
+  string model_name = 1;
+  string model_revision = 2;
+  repeated string target_nodes = 3;
+  map<string, string> config = 4;
+}
+
+message PinModelResponse {
+  bool success = 1;
+  string message = 2;
+  string pin_id = 3;
+}
+
+// Request/Response messages for UnpinModel
+message UnpinModelRequest {
+  string model_name = 1;
+  string model_revision = 2;
+  repeated string target_nodes = 3;
+}
+
+message UnpinModelResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// Request/Response messages for LoadModel
+message LoadModelRequest {
+  string model_name = 1;
+  string model_revision = 2;
+  string target_node = 3;
+  map<string, string> config = 4;
+}
+
+message LoadModelResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// Request/Response messages for UnloadModel
+message UnloadModelRequest {
+  string model_name = 1;
+  string model_revision = 2;
+  string target_node = 3;
+}
+
+message UnloadModelResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// Request/Response messages for Policy management
+message SetPolicyRequest {
+  Policy policy = 1;
+}
+
+message SetPolicyResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetPolicyRequest {
+  string policy_name = 1;
+}
+
+message GetPolicyResponse {
+  Policy policy = 1;
+}
+
+message DeletePolicyRequest {
+  string policy_name = 1;
+}
+
+message DeletePolicyResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ListPoliciesRequest {
+  PolicyType type_filter = 1;
+}
+
+message ListPoliciesResponse {
+  repeated Policy policies = 1;
+}
+
+// Event streaming
+message SubscribeEventsRequest {
+  repeated EventType event_types = 1;
+  map<string, string> filters = 2;
+}
+
+message Event {
+  string id = 1;
+  EventType type = 2;
+  google.protobuf.Timestamp timestamp = 3;
+  string source_node = 4;
+  map<string, string> data = 5;
+}
+
+enum EventType {
+  EVENT_TYPE_UNSPECIFIED = 0;
+  EVENT_TYPE_NODE_JOINED = 1;
+  EVENT_TYPE_NODE_LEFT = 2;
+  EVENT_TYPE_NODE_UNHEALTHY = 3;
+  EVENT_TYPE_MODEL_LOADED = 4;
+  EVENT_TYPE_MODEL_UNLOADED = 5;
+  EVENT_TYPE_MODEL_FAILED = 6;
+  EVENT_TYPE_POLICY_CREATED = 7;
+  EVENT_TYPE_POLICY_UPDATED = 8;
+  EVENT_TYPE_POLICY_DELETED = 9;
+}

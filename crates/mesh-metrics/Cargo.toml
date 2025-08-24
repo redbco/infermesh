@@ -1,0 +1,58 @@
+[package]
+name = "mesh-metrics"
+version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "Unified metrics handling for infermesh - Prometheus and OpenTelemetry integration"
+keywords.workspace = true
+categories.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+# Core dependencies
+mesh-core = { path = "../mesh-core" }
+
+# Async runtime
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
+
+# HTTP server for metrics endpoint
+hyper = { workspace = true, features = ["server", "http1"] }
+axum = { workspace = true }
+
+# Prometheus metrics
+prometheus = { workspace = true }
+metrics = { workspace = true }
+metrics-exporter-prometheus = { workspace = true }
+
+# OpenTelemetry (optional)
+opentelemetry = { workspace = true, optional = true }
+opentelemetry-otlp = { workspace = true, optional = true }
+
+# Tracing
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true, features = ["env-filter", "fmt", "json"] }
+
+# Serialization
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+
+# Utilities
+chrono = { workspace = true }
+uuid = { workspace = true }
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+[dev-dependencies]
+tokio-test = "0.4"
+tempfile = { workspace = true }
+
+[features]
+default = ["prometheus"]
+prometheus = []
+opentelemetry = ["dep:opentelemetry", "dep:opentelemetry-otlp"]
+all = ["prometheus", "opentelemetry"]

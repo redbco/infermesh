@@ -1,0 +1,67 @@
+[package]
+name = "mesh-net"
+version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "Networking helpers and mTLS support for infermesh"
+keywords.workspace = true
+categories.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+# Core dependencies
+mesh-core = { path = "../mesh-core" }
+mesh-proto = { path = "../mesh-proto" }
+
+# Async runtime
+tokio = { workspace = true, features = ["macros", "rt-multi-thread", "net", "time", "sync", "io-util"] }
+async-trait = { workspace = true }
+
+# Networking
+hyper = { workspace = true }
+tonic = { workspace = true }
+reqwest = { version = "0.11", features = ["json"] }
+
+# TLS/mTLS
+rustls = { workspace = true }
+rustls-pemfile = { workspace = true }
+tokio-rustls = "0.25"
+
+# Serialization
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+
+# Utilities
+chrono = { workspace = true }
+uuid = { workspace = true }
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Tracing
+tracing = { workspace = true }
+
+# Connection pooling
+dashmap = { workspace = true }
+parking_lot = { workspace = true }
+
+# Random number generation
+rand = "0.8"
+
+# Optional QUIC support
+quinn = { workspace = true, optional = true }
+
+[dev-dependencies]
+tokio-test = "0.4"
+tempfile = { workspace = true }
+
+[features]
+default = []
+# Enable QUIC/HTTP3 support
+quic = ["quinn"]
+# Enable connection pooling
+pooling = []

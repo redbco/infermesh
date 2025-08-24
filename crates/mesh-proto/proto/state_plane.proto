@@ -1,0 +1,145 @@
+syntax = "proto3";
+
+package infermesh.state.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// State Plane service for telemetry and state updates
+service StatePlane {
+  // State updates (from adapters to agent)
+  rpc ReportModelState(stream ModelStateDelta) returns (stream ModelStateAck);
+  rpc ReportGpuState(stream GpuStateDelta) returns (stream GpuStateAck);
+  
+  // State queries (from other components)
+  rpc GetModelState(GetModelStateRequest) returns (GetModelStateResponse);
+  rpc GetGpuState(GetGpuStateRequest) returns (GetGpuStateResponse);
+  rpc ListModelStates(ListModelStatesRequest) returns (ListModelStatesResponse);
+  rpc ListGpuStates(ListGpuStatesRequest) returns (ListGpuStatesResponse);
+}
+
+// Labels for identifying resources
+message Labels {
+  string model = 1;
+  string revision = 2;
+  string quant = 3;
+  string runtime = 4;
+  string node = 5;
+  string gpu_uuid = 6;
+  string mig_profile = 7;
+  string tenant = 8;
+  string zone = 9;
+  map<string, string> custom = 10;
+}
+
+// Model state information
+message ModelState {
+  Labels labels = 1;
+  uint32 queue_depth = 2;
+  double service_rate = 3;
+  uint32 p95_latency_ms = 4;
+  float batch_fullness = 5;
+  bool loaded = 6;
+  bool warming = 7;
+  float work_left_seconds = 8;
+  google.protobuf.Timestamp last_updated = 9;
+}
+
+// Model state delta for efficient updates
+message ModelStateDelta {
+  Labels labels = 1;
+  optional uint32 queue_depth = 2;
+  optional double service_rate = 3;
+  optional uint32 p95_latency_ms = 4;
+  optional float batch_fullness = 5;
+  optional bool loaded = 6;
+  optional bool warming = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}
+
+// Acknowledgment for model state updates
+message ModelStateAck {
+  string request_id = 1;
+  bool success = 2;
+  string error_message = 3;
+}
+
+// GPU state information
+message GpuState {
+  string gpu_uuid = 1;
+  string node = 2;
+  string mig_profile = 3;
+  float sm_utilization = 4;
+  float memory_utilization = 5;
+  float vram_used_gb = 6;
+  float vram_total_gb = 7;
+  float temperature_c = 8;
+  float power_watts = 9;
+  bool ecc_errors = 10;
+  bool throttled = 11;
+  google.protobuf.Timestamp last_updated = 12;
+}
+
+// GPU state delta for efficient updates
+message GpuStateDelta {
+  string gpu_uuid = 1;
+  string node = 2;
+  optional float sm_utilization = 3;
+  optional float memory_utilization = 4;
+  optional float vram_used_gb = 5;
+  optional float vram_total_gb = 6;
+  optional float temperature_c = 7;
+  optional float power_watts = 8;
+  optional bool ecc_errors = 9;
+  optional bool throttled = 10;
+  google.protobuf.Timestamp timestamp = 11;
+}
+
+// Acknowledgment for GPU state updates
+message GpuStateAck {
+  string request_id = 1;
+  bool success = 2;
+  string error_message = 3;
+}
+
+// Request/Response messages for GetModelState
+message GetModelStateRequest {
+  Labels labels = 1;
+}
+
+message GetModelStateResponse {
+  ModelState state = 1;
+  bool found = 2;
+}
+
+// Request/Response messages for GetGpuState
+message GetGpuStateRequest {
+  string gpu_uuid = 1;
+  string node = 2;
+}
+
+message GetGpuStateResponse {
+  GpuState state = 1;
+  bool found = 2;
+}
+
+// Request/Response messages for ListModelStates
+message ListModelStatesRequest {
+  string model_filter = 1;
+  string runtime_filter = 2;
+  string node_filter = 3;
+  bool loaded_only = 4;
+}
+
+message ListModelStatesResponse {
+  repeated ModelState states = 1;
+}
+
+// Request/Response messages for ListGpuStates
+message ListGpuStatesRequest {
+  string node_filter = 1;
+  bool healthy_only = 2;
+}
+
+message ListGpuStatesResponse {
+  repeated GpuState states = 1;
+}

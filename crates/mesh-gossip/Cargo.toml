@@ -1,0 +1,55 @@
+[package]
+name = "mesh-gossip"
+version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "SWIM-style gossip protocol for infermesh node membership and failure detection"
+keywords.workspace = true
+categories.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+# Core dependencies
+mesh-core = { path = "../mesh-core" }
+mesh-proto = { path = "../mesh-proto" }
+
+# Async runtime
+tokio = { workspace = true, features = ["macros", "rt-multi-thread", "time", "sync", "net"] }
+async-trait = { workspace = true }
+
+# Networking
+hyper = { workspace = true }
+tokio-stream = { workspace = true }
+
+# Serialization
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+bincode = "1.3"
+
+# Utilities
+chrono = { workspace = true }
+uuid = { workspace = true }
+rand = "0.8"
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Tracing
+tracing = { workspace = true }
+
+# Cryptography for message authentication
+ring = "0.17"
+base64 = "0.22"
+
+[dev-dependencies]
+tokio-test = "0.4"
+tempfile = { workspace = true }
+
+[features]
+default = []
+# Enable encryption for gossip messages
+encryption = []

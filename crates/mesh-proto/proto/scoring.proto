@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+package infermesh.scoring.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// Scoring service for routing decisions
+service Scoring {
+  // Get scored targets for a request
+  rpc ScoreTargets(ScoreTargetsRequest) returns (ScoreTargetsResponse);
+  
+  // Admission control
+  rpc Admit(AdmitRequest) returns (AdmitResponse);
+  
+  // Report request outcome
+  rpc ReportOutcome(ReportOutcomeRequest) returns (ReportOutcomeResponse);
+  
+  // Health check
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+}
+
+// SLO class for request prioritization
+enum SloClass {
+  SLO_CLASS_UNSPECIFIED = 0;
+  SLO_CLASS_LATENCY = 1;
+  SLO_CLASS_THROUGHPUT = 2;
+}
+
+// Request for scoring targets
+message ScoreTargetsRequest {
+  string model = 1;
+  string revision = 2;
+  SloClass slo_class = 3;
+  uint32 estimated_tokens = 4;
+  float timeout_seconds = 5;
+  map<string, string> filters = 6;
+  string request_id = 7;
+}
+
+// Scored target for routing
+message ScoredTarget {
+  string node_id = 1;
+  string gpu_uuid = 2;
+  float score = 3;
+  float estimated_latency_ms = 4;
+  float estimated_queue_time_ms = 5;
+  float load_factor = 6;
+  string reason = 7;
+}
+
+// Response with scored targets
+message ScoreTargetsResponse {
+  repeated ScoredTarget targets = 1;
+  string request_id = 2;
+  google.protobuf.Timestamp timestamp = 3;
+}
+
+// Request for admission control
+message AdmitRequest {
+  string model = 1;
+  string revision = 2;
+  string target_node = 3;
+  string target_gpu = 4;
+  SloClass slo_class = 5;
+  uint32 estimated_tokens = 6;
+  float timeout_seconds = 7;
+  string request_id = 8;
+}
+
+// Response for admission control
+message AdmitResponse {
+  bool admitted = 1;
+  string reason = 2;
+  float estimated_wait_time_ms = 3;
+  string request_id = 4;
+  string admission_token = 5;
+}
+
+// Request outcome reporting
+message ReportOutcomeRequest {
+  string request_id = 1;
+  string admission_token = 2;
+  string target_node = 3;
+  string target_gpu = 4;
+  RequestOutcome outcome = 5;
+  float actual_latency_ms = 6;
+  float actual_queue_time_ms = 7;
+  uint32 actual_tokens = 8;
+  string error_message = 9;
+  google.protobuf.Timestamp completed_at = 10;
+}
+
+enum RequestOutcome {
+  REQUEST_OUTCOME_UNSPECIFIED = 0;
+  REQUEST_OUTCOME_SUCCESS = 1;
+  REQUEST_OUTCOME_TIMEOUT = 2;
+  REQUEST_OUTCOME_ERROR = 3;
+  REQUEST_OUTCOME_REJECTED = 4;
+  REQUEST_OUTCOME_CANCELLED = 5;
+}
+
+// Response for outcome reporting
+message ReportOutcomeResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// Health check request
+message HealthCheckRequest {
+  string service = 1;
+}
+
+// Health check response
+message HealthCheckResponse {
+  HealthStatus status = 1;
+  string message = 2;
+  map<string, string> details = 3;
+}
+
+enum HealthStatus {
+  HEALTH_STATUS_UNSPECIFIED = 0;
+  HEALTH_STATUS_SERVING = 1;
+  HEALTH_STATUS_NOT_SERVING = 2;
+  HEALTH_STATUS_UNKNOWN = 3;
+}
