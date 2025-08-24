@@ -27,29 +27,29 @@ flowchart LR
   classDef runtime fill:#f7ecff,stroke:#c69cf2,stroke-width:1px,color:#442266;
 
   %% Clients & Ingress
-  subgraph Clients/Ingress
+  subgraph ClientsIngress["Clients/Ingress"]
     C[Clients / SDKs / Services]
     R[mesh-router<br/>HTTP/2 gRPC, HTTP, WS/SSE]:::core
     C -->|"HTTP/2 gRPC / HTTP (streaming)"| R
   end
 
   %% Node (generic)
-  subgraph Node (any role)
+  subgraph NodeAnyRole["Node (any role)"]
     direction TB
-    A[mesh-agent (meshd)<br/>/metrics + OTLP]:::core
+    A[mesh-agent meshd<br/>/metrics + OTLP]:::core
     S[State Fusion & Scoring API<br/>ScoreTargets/Admit/ReportOutcome]:::core
-    G[mesh-gossip (SWIM)]:::core
-    RF[mesh-raft (policies/placements/ACLs)]:::core
+    G[mesh-gossip SWIM]:::core
+    RF[mesh-raft policies/placements/ACLs]:::core
 
-    subgraph GPU Node Internals
+    subgraph GPUNodeInternals["GPU Node Internals"]
       direction TB
-      RA[Runtime Adapter<br/>(Triton/vLLM/TGI/...)]:::adapter
-      GA[GPU Telemetry Adapter<br/>(DCGM/NVML)]:::adapter
-      RT[Model Runtime<br/>(Triton / vLLM / TGI / TorchServe / TF Serving / OVMS)]:::runtime
-      GPU[GPU(s) + MIG/MPS]:::runtime
+      RA[Runtime Adapter<br/>Triton/vLLM/TGI/...]:::adapter
+      GA[GPU Telemetry Adapter<br/>DCGM/NVML]:::adapter
+      RT[Model Runtime<br/>Triton / vLLM / TGI / TorchServe / TF Serving / OVMS]:::runtime
+      GPU[GPUs + MIG/MPS]:::runtime
       DCGM[DCGM / NVML]:::runtime
-      RA -->|"ControlModel (load/unload/warm)"| RT
-      RA -->|"/metrics (Prometheus)"| RT
+      RA -->|"ControlModel load/unload/warm"| RT
+      RA -->|"/metrics Prometheus"| RT
       GA -->|"util/mem/ECC/MIG"| DCGM
       DCGM --> GA
     end
@@ -65,7 +65,7 @@ flowchart LR
   R -->|"UDS/TCP gRPC: ScoreTargets/Admit"| A
 
   %% Optional external sinks
-  subgraph Observability (optional)
+  subgraph ObservabilityOptional["Observability (optional)"]
     P[Prometheus / Grafana]:::external
     OT[OpenTelemetry Collector]:::external
   end
@@ -73,18 +73,18 @@ flowchart LR
   R -->|"/metrics"| P
   RA -->|"/metrics"| P
   GA -->|"/metrics"| P
-  A -->|"OTLP (traces/logs/metrics)"| OT
-  R -->|"OTLP (traces)"| OT
+  A -->|"OTLP traces/logs/metrics"| OT
+  R -->|"OTLP traces"| OT
 
   %% Control-plane clients
-  subgraph Admin/Automation
+  subgraph AdminAutomation["Admin/Automation"]
     CLI[mesh-cli / CI/CD]:::external
-    CLI -->|"gRPC (mTLS), SetPolicy/PinModel/DrainNode/SubscribeEvents"| A
+    CLI -->|"gRPC mTLS, SetPolicy/PinModel/DrainNode/SubscribeEvents"| A
   end
 
   %% Gossip and Raft peerings (shown abstractly)
-  G <-->|"SWIM gossip (UDP/TCP)"| G
-  RF <-->|"Raft (gRPC/TCP)"| RF
+  G <-->|"SWIM gossip UDP/TCP"| G
+  RF <-->|"Raft gRPC/TCP"| RF
 ```
 
 > **Legend**: Blue = core mesh processes, Green = adapters, Purple = runtimes/GPUs, Yellow = external sinks.  
