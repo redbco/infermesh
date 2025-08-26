@@ -19,7 +19,7 @@ It coordinates nodes, routes requests based on live GPU + network state, and exp
 
 ## 🎯 Who is this for?
 
-infermesh is targeted at organizations and teams that run **AI inference at meaningful scale** and face challenges in GPU efficiency, reliability, and observability. Typical users include:
+**InferMesh** is targeted at organizations and teams that run **AI inference at meaningful scale** and face challenges in GPU efficiency, reliability, and observability. Typical users include:
 
 - **AI infrastructure teams** running fleets of hundreds or thousands of GPUs who need better utilization and reduced cost per inference.  
 - **Cloud providers and platform teams** offering inference services and wanting to integrate multi-tenant, GPU-aware routing.  
