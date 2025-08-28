@@ -14,6 +14,7 @@ members = [
     "crates/mesh-cli",
     "crates/mesh-adapter-runtime",
     "crates/mesh-adapter-gpu",
+    "crates/mesh-sim",
     # TODO: Add other crates as they are implemented
 ]
 
