@@ -7,7 +7,7 @@ use anyhow::Result;
 
 /// Handle quota commands
 pub async fn handle_quota_command(
-    client: &MeshClient,
+    _client: &MeshClient,
     action: QuotaCommands,
     output_format: OutputFormat,
 ) -> Result<()> {

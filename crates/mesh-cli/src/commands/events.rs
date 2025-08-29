@@ -6,7 +6,7 @@ use anyhow::Result;
 
 /// Subscribe to mesh events
 pub async fn subscribe_events(
-    client: &MeshClient,
+    _client: &MeshClient,
     types: Option<Vec<String>>,
     follow: bool,
     history: u32,

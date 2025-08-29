@@ -176,6 +176,7 @@ impl OutputFormatter {
     }
 
     /// Print an error message
+    #[allow(dead_code)]
     pub fn print_error(&self, message: &str) -> Result<()> {
         match self.format {
             OutputFormat::Json => {
@@ -197,6 +198,7 @@ impl OutputFormatter {
     }
 
     /// Print a warning message
+    #[allow(dead_code)]
     pub fn print_warning(&self, message: &str) -> Result<()> {
         match self.format {
             OutputFormat::Json => {
@@ -335,11 +337,13 @@ pub fn format_bytes(bytes: u64) -> String {
 }
 
 /// Helper function to format percentage
+#[allow(dead_code)]
 pub fn format_percentage(value: f64) -> String {
     format!("{:.1}%", value * 100.0)
 }
 
 /// Helper function to colorize status
+#[allow(dead_code)]
 pub fn colorize_status(status: &str) -> ColoredString {
     match status.to_lowercase().as_str() {
         "healthy" | "ready" | "active" | "running" | "online" | "up" => status.green(),

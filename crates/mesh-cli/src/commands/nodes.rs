@@ -1,7 +1,7 @@
 //! Node management commands
 
 use crate::client::MeshClient;
-use crate::output::{OutputFormat, OutputFormatter, Formattable, colorize_status, format_duration, format_bytes};
+use crate::output::{OutputFormat, OutputFormatter, Formattable, format_duration, format_bytes};
 use anyhow::Result;
 use serde::Serialize;
 
@@ -65,7 +65,7 @@ impl Formattable for NodeInfo {
 
 /// List nodes in the mesh
 pub async fn list_nodes(
-    client: &MeshClient,
+    _client: &MeshClient,
     role_filter: Option<String>,
     status_filter: Option<String>,
     detailed: bool,
@@ -96,7 +96,7 @@ pub async fn list_nodes(
 
 /// Describe a specific node
 pub async fn describe_node(
-    client: &MeshClient,
+    _client: &MeshClient,
     node_id: String,
     output_format: OutputFormat,
 ) -> Result<()> {

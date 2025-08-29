@@ -27,6 +27,7 @@ pub struct GossipNode {
     protocol: SwimProtocol,
     
     /// Transport layer
+    #[allow(dead_code)]
     transport: Arc<dyn Transport>,
     
     /// Event receiver for protocol events

@@ -7,7 +7,7 @@ use std::collections::HashMap;
 
 /// Show mesh statistics
 pub async fn show_stats(
-    client: &MeshClient,
+    _client: &MeshClient,
     detailed: bool,
     refresh: Option<u64>,
     output_format: OutputFormat,

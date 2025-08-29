@@ -15,10 +15,15 @@ use tracing::{debug, info, warn};
 /// Client for interacting with mesh control plane
 #[derive(Clone)]
 pub struct MeshClient {
+    #[allow(dead_code)]
     endpoint: String,
+    #[allow(dead_code)]
     timeout: Duration,
+    #[allow(dead_code)]
     control_plane: ControlPlaneClient<Channel>,
+    #[allow(dead_code)]
     state_plane: StatePlaneClient<Channel>,
+    #[allow(dead_code)]
     scoring: ScoringClient<Channel>,
 }
 
@@ -50,16 +55,19 @@ impl MeshClient {
     }
 
     /// Get the endpoint URL
+    #[allow(dead_code)]
     pub fn endpoint(&self) -> &str {
         &self.endpoint
     }
 
     /// Get the configured timeout
+    #[allow(dead_code)]
     pub fn timeout(&self) -> Duration {
         self.timeout
     }
 
     /// List nodes in the mesh
+    #[allow(dead_code)]
     pub async fn list_nodes(&self, role_filter: Option<String>, status_filter: Option<String>) -> Result<Vec<Node>> {
         debug!("Listing nodes with role_filter: {:?}, status_filter: {:?}", role_filter, status_filter);
         
@@ -98,6 +106,7 @@ impl MeshClient {
     }
 
     /// Get details for a specific node
+    #[allow(dead_code)]
     pub async fn get_node(&self, node_id: String) -> Result<Node> {
         debug!("Getting node details for {}", node_id);
         
@@ -117,6 +126,7 @@ impl MeshClient {
     }
 
     /// Pin a model to specific nodes
+    #[allow(dead_code)]
     pub async fn pin_model(
         &self,
         model_name: String,
@@ -158,6 +168,7 @@ impl MeshClient {
     }
 
     /// Unpin a model from nodes
+    #[allow(dead_code)]
     pub async fn unpin_model(&self, model_name: String, target_nodes: Option<Vec<String>>) -> Result<()> {
         debug!("Unpinning model {} from nodes {:?}", model_name, target_nodes);
         
@@ -183,6 +194,7 @@ impl MeshClient {
     }
 
     /// List policies
+    #[allow(dead_code)]
     pub async fn list_policies(&self, policy_type: Option<String>) -> Result<Vec<Policy>> {
         debug!("Listing policies with type filter: {:?}", policy_type);
         
@@ -203,6 +215,7 @@ impl MeshClient {
     }
 
     /// Get mesh state (model states)
+    #[allow(dead_code)]
     pub async fn get_state(&self) -> Result<Vec<mesh_proto::ModelState>> {
         debug!("Getting mesh state (model states)");
         
@@ -226,6 +239,7 @@ impl MeshClient {
     }
 
     /// Query models
+    #[allow(dead_code)]
     pub async fn query_models(&self, model_filter: Option<String>, runtime_filter: Option<String>) -> Result<Vec<Model>> {
         debug!("Querying models with filters - model: {:?}, runtime: {:?}", model_filter, runtime_filter);
         
@@ -248,6 +262,7 @@ impl MeshClient {
     }
 
     /// Check if the client can connect to the control plane
+    #[allow(dead_code)]
     pub async fn health_check(&self) -> Result<bool> {
         debug!("Performing health check");
         
@@ -265,6 +280,7 @@ impl MeshClient {
     }
 
     /// Subscribe to events (placeholder implementation)
+    #[allow(dead_code)]
     pub async fn subscribe_events(&self, event_types: Option<Vec<String>>) -> Result<()> {
         debug!("Subscribing to events: {:?} (placeholder implementation)", event_types);
         

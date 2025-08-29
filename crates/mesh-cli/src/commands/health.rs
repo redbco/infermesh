@@ -7,7 +7,7 @@ use anyhow::Result;
 
 /// Handle health commands
 pub async fn handle_health_command(
-    client: &MeshClient,
+    _client: &MeshClient,
     action: HealthCommands,
     output_format: OutputFormat,
 ) -> Result<()> {

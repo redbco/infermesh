@@ -204,9 +204,11 @@ pub struct DiskStorage {
     sync_writes: bool,
     
     /// Compress entries
+    #[allow(dead_code)]
     compress_entries: bool,
     
     /// Maximum entries in memory
+    #[allow(dead_code)]
     max_memory_entries: usize,
 }
 

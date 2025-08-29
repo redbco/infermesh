@@ -7,7 +7,7 @@ use anyhow::Result;
 
 /// Handle config commands
 pub async fn handle_config_command(
-    client: &MeshClient,
+    _client: &MeshClient,
     action: ConfigCommands,
     output_format: OutputFormat,
 ) -> Result<()> {

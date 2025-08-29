@@ -173,9 +173,8 @@ pub fn create_registry_with_defaults() -> Result<Registry> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use prometheus::{Counter, Opts};
+    use prometheus::Counter;
     use std::time::Duration;
-    use tokio::time::timeout;
 
     #[tokio::test]
     async fn test_prometheus_exporter_creation() {

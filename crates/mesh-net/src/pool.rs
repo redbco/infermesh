@@ -33,6 +33,7 @@ pub struct PoolConfig {
 #[derive(Debug)]
 struct PooledConnection {
     connection: Connection,
+    #[allow(dead_code)]
     created_at: Instant,
     last_used: Instant,
     use_count: usize,

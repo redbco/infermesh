@@ -6,13 +6,13 @@ use anyhow::Result;
 
 /// Pin a model to specific nodes
 pub async fn pin_model(
-    client: &MeshClient,
+    _client: &MeshClient,
     model: String,
     nodes: Vec<String>,
-    version: Option<String>,
+    _version: Option<String>,
     min_replicas: u32,
-    max_replicas: Option<u32>,
-    priority: String,
+    _max_replicas: Option<u32>,
+    _priority: String,
     output_format: OutputFormat,
 ) -> Result<()> {
     let formatter = OutputFormatter::new(output_format);
@@ -35,7 +35,7 @@ pub async fn pin_model(
 
 /// Unpin a model from nodes
 pub async fn unpin_model(
-    client: &MeshClient,
+    _client: &MeshClient,
     model: String,
     nodes: Option<Vec<String>>,
     output_format: OutputFormat,
@@ -60,9 +60,9 @@ pub async fn unpin_model(
 
 /// List model pinning policies
 pub async fn list_pins(
-    client: &MeshClient,
-    model: Option<String>,
-    node: Option<String>,
+    _client: &MeshClient,
+    _model: Option<String>,
+    _node: Option<String>,
     output_format: OutputFormat,
 ) -> Result<()> {
     let formatter = OutputFormatter::new(output_format);
@@ -115,7 +115,7 @@ pub async fn list_pins(
 
 /// Describe a specific model
 pub async fn describe_model(
-    client: &MeshClient,
+    _client: &MeshClient,
     model: String,
     version: Option<String>,
     output_format: OutputFormat,

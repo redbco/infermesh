@@ -5,7 +5,6 @@ use crate::handler::RequestHandler;
 use crate::server::{HttpServer, GrpcServer};
 use crate::{Result, RouterError};
 
-use mesh_core::NodeId;
 use mesh_net::{ConnectionPool, TlsConfig};
 use mesh_state::{StateStore, QueryEngine, ScoringEngine};
 
@@ -14,7 +13,7 @@ use std::sync::Arc;
 use std::time::Instant;
 use tokio::sync::RwLock;
 use tokio::task::JoinHandle;
-use tracing::{info, warn, error};
+use tracing::{info, warn};
 
 /// Main router that coordinates HTTP and gRPC servers
 pub struct Router {

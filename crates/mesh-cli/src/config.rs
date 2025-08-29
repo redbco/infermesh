@@ -133,6 +133,7 @@ impl CliConfig {
     }
 
     /// Save configuration to file
+    #[allow(dead_code)]
     pub fn save(&self) -> Result<()> {
         let path = self.source.as_ref()
             .ok_or_else(|| anyhow::anyhow!("No config file path specified"))?;
@@ -169,12 +170,14 @@ impl CliConfig {
     }
 
     /// Get the active profile configuration
+    #[allow(dead_code)]
     pub fn active_profile(&self) -> Option<&ProfileConfig> {
         self.current_profile.as_ref()
             .and_then(|name| self.profiles.get(name))
     }
 
     /// Get effective endpoint (from active profile or default)
+    #[allow(dead_code)]
     pub fn effective_endpoint(&self) -> &str {
         self.active_profile()
             .map(|p| p.endpoint.as_str())
@@ -182,6 +185,7 @@ impl CliConfig {
     }
 
     /// Get effective timeout (from active profile or default)
+    #[allow(dead_code)]
     pub fn effective_timeout(&self) -> u64 {
         self.active_profile()
             .and_then(|p| p.timeout)
@@ -189,6 +193,7 @@ impl CliConfig {
     }
 
     /// Get effective output format (from active profile or default)
+    #[allow(dead_code)]
     pub fn effective_output_format(&self) -> &str {
         self.active_profile()
             .and_then(|p| p.output_format.as_ref())
@@ -197,6 +202,7 @@ impl CliConfig {
     }
 
     /// Get effective auth config (from active profile or default)
+    #[allow(dead_code)]
     pub fn effective_auth(&self) -> &AuthConfig {
         self.active_profile()
             .and_then(|p| p.auth.as_ref())
@@ -204,11 +210,13 @@ impl CliConfig {
     }
 
     /// Add or update a profile
+    #[allow(dead_code)]
     pub fn set_profile(&mut self, profile: ProfileConfig) {
         self.profiles.insert(profile.name.clone(), profile);
     }
 
     /// Remove a profile
+    #[allow(dead_code)]
     pub fn remove_profile(&mut self, name: &str) -> Option<ProfileConfig> {
         // If removing the current profile, clear it
         if self.current_profile.as_ref() == Some(&name.to_string()) {
@@ -218,6 +226,7 @@ impl CliConfig {
     }
 
     /// Set the current active profile
+    #[allow(dead_code)]
     pub fn set_current_profile(&mut self, name: Option<String>) -> Result<()> {
         if let Some(ref name) = name {
             if !self.profiles.contains_key(name) {
@@ -229,11 +238,13 @@ impl CliConfig {
     }
 
     /// List all profile names
+    #[allow(dead_code)]
     pub fn profile_names(&self) -> Vec<&String> {
         self.profiles.keys().collect()
     }
 
     /// Get a configuration value by key
+    #[allow(dead_code)]
     pub fn get(&self, key: &str) -> Option<String> {
         // Check active profile settings first
         if let Some(profile) = self.active_profile() {
@@ -255,6 +266,7 @@ impl CliConfig {
     }
 
     /// Set a configuration value by key
+    #[allow(dead_code)]
     pub fn set(&mut self, key: &str, value: String) -> Result<()> {
         match key {
             "endpoint" => self.endpoint = value,
@@ -288,6 +300,7 @@ impl CliConfig {
 
 impl ProfileConfig {
     /// Create a new profile
+    #[allow(dead_code)]
     pub fn new(name: String, endpoint: String) -> Self {
         Self {
             name,

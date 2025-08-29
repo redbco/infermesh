@@ -1,6 +1,5 @@
 //! Router configuration
 
-use mesh_core::NodeId;
 use serde::{Deserialize, Serialize};
 use std::net::SocketAddr;
 use std::time::Duration;

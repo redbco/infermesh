@@ -230,6 +230,7 @@ impl TcpTransport {
     }
     
     /// Handle incoming TCP connections
+    #[allow(dead_code)]
     async fn handle_connection(&self, mut stream: TcpStream, peer_addr: SocketAddr) -> Result<()> {
         use tokio::io::AsyncReadExt;
         

@@ -39,6 +39,7 @@ pub struct SwimProtocol {
     pending_probes: Arc<RwLock<HashMap<NodeId, ProbeRequest>>>,
     
     /// Message handlers
+    #[allow(dead_code)]
     message_handlers: HashMap<MessageType, Box<dyn MessageHandler>>,
     
     /// Running state
@@ -51,9 +52,12 @@ pub struct SwimProtocol {
 /// Probe request tracking
 #[derive(Debug)]
 struct ProbeRequest {
+    #[allow(dead_code)]
     target: NodeId,
+    #[allow(dead_code)]
     target_addr: SocketAddr,
     started_at: Instant,
+    #[allow(dead_code)]
     indirect_probes: HashSet<NodeId>,
 }
 
@@ -81,6 +85,7 @@ pub enum ProtocolEvent {
 
 /// Trait for handling specific message types
 trait MessageHandler: Send + Sync {
+    #[allow(dead_code)]
     fn handle(&self, message: &GossipMessage, from: SocketAddr) -> Result<Option<GossipMessage>>;
 }
 

@@ -4,13 +4,13 @@ use crate::config::{RouterConfig, LoadBalancingStrategy};
 use crate::{Result, RouterError};
 
 use mesh_core::{Labels, NodeId};
-use mesh_net::{ConnectionPool, LoadBalancer, ServiceDiscovery, MemoryServiceDiscovery};
+use mesh_net::{ConnectionPool, ServiceDiscovery};
 use mesh_state::{StateStore, QueryEngine, ScoringEngine};
 
 use std::sync::Arc;
 use std::collections::HashMap;
 use tokio::sync::RwLock;
-use tracing::{debug, info, warn, error};
+use tracing::{debug, info, warn};
 use uuid::Uuid;
 
 /// Request context for tracking and tracing
@@ -106,6 +106,7 @@ pub struct RequestHandler {
     service_discovery: Arc<dyn ServiceDiscovery>,
     
     /// Load balancer
+    #[allow(dead_code)]
     load_balancer: Arc<dyn mesh_net::LoadBalancer>,
     
     /// Circuit breaker states

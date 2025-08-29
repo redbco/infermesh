@@ -39,8 +39,11 @@ pub enum StateDelta {
 /// Pending delta waiting to be applied
 #[derive(Debug, Clone)]
 pub struct PendingDelta {
+    #[allow(dead_code)]
     delta: StateDelta,
+    #[allow(dead_code)]
     received_at: std::time::Instant,
+    #[allow(dead_code)]
     retry_count: u32,
 }
 

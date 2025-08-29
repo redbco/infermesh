@@ -7,7 +7,7 @@ use anyhow::Result;
 
 /// Handle ACL commands
 pub async fn handle_acl_command(
-    client: &MeshClient,
+    _client: &MeshClient,
     action: AclCommands,
     output_format: OutputFormat,
 ) -> Result<()> {

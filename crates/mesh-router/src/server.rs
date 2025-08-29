@@ -6,7 +6,7 @@ use crate::router::RouterStats;
 use crate::{Result, RouterError};
 
 use axum::{
-    extract::{Path, Query, State, WebSocketUpgrade},
+    extract::{Path, State, WebSocketUpgrade},
     http::{HeaderMap, StatusCode},
     response::{IntoResponse, Response},
     routing::{get, post},
@@ -14,7 +14,6 @@ use axum::{
 };
 use axum::serve;
 use serde_json::{json, Value};
-use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::sync::Arc;
 use tower::ServiceBuilder;
@@ -23,7 +22,6 @@ use tower_http::{
     compression::CompressionLayer,
     trace::TraceLayer,
 };
-use tokio_stream::wrappers::TcpListenerStream;
 use tracing::{info, error, debug};
 
 /// HTTP server for handling REST API and WebSocket connections
@@ -37,8 +35,11 @@ pub struct HttpServer {
 /// gRPC server for handling gRPC requests
 #[derive(Clone)]
 pub struct GrpcServer {
+    #[allow(dead_code)]
     config: RouterConfig,
+    #[allow(dead_code)]
     handler: Arc<RequestHandler>,
+    #[allow(dead_code)]
     stats: Arc<RouterStats>,
 }
 
@@ -154,7 +155,7 @@ impl GrpcServer {
 
         // For now, just create a basic gRPC server
         // In a full implementation, this would include the actual gRPC services
-        let mut server_builder = tonic::transport::Server::builder();
+        let mut _server_builder = tonic::transport::Server::builder();
 
         // Add reflection if enabled
         #[cfg(feature = "reflection")]
@@ -433,6 +434,7 @@ mod tests {
     use mesh_net::{ConnectionPool, TlsConfig};
     use mesh_state::{StateStore, QueryEngine, ScoringEngine};
 
+    #[allow(dead_code)]
     async fn create_test_app_state() -> AppState {
         let config = RouterConfigBuilder::new().build();
         let state_store = StateStore::new();

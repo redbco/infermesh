@@ -12,7 +12,7 @@ use std::collections::HashMap;
 use std::time::Duration;
 use tokio::time::timeout;
 // Removed tonic client imports for now - using hyper-based approach
-use tracing::{debug, info, warn, error};
+use tracing::{debug, info, warn};
 
 /// HTTP proxy for forwarding requests to upstream services
 pub struct HttpProxy {
@@ -395,8 +395,8 @@ impl RetryPolicy {
 mod tests {
     use super::*;
     use mesh_core::{Labels, NodeId};
-    use std::net::SocketAddr;
 
+    #[allow(dead_code)]
     fn create_test_target() -> RoutingTarget {
         RoutingTarget {
             node_id: NodeId::new("test-node"),
