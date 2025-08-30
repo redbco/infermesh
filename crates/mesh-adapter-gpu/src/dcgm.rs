@@ -21,6 +21,7 @@ pub struct DcgmMonitor {
     // Simulation state for enterprise features
     discovered_gpus: Arc<RwLock<Vec<u32>>>,
     monitoring_active: Arc<RwLock<bool>>,
+    #[allow(unused)]
     last_metrics_update: Arc<RwLock<Instant>>,
 }
 

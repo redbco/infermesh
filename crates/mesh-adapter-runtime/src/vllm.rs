@@ -31,14 +31,18 @@ struct VLlmHealthResponse {
 #[derive(Debug, Deserialize)]
 struct VLlmModelInfo {
     id: String,
+    #[allow(unused)]
     object: String,
+    #[allow(unused)]
     created: u64,
+    #[allow(unused)]
     owned_by: String,
 }
 
 /// vLLM models list response
 #[derive(Debug, Deserialize)]
 struct VLlmModelsResponse {
+    #[allow(unused)]
     object: String,
     data: Vec<VLlmModelInfo>,
 }
@@ -66,11 +70,16 @@ struct VLlmCompletionRequest {
 /// vLLM completion response
 #[derive(Debug, Deserialize)]
 struct VLlmCompletionResponse {
+    #[allow(unused)]
     id: String,
+    #[allow(unused)]
     object: String,
+    #[allow(unused)]
     created: u64,
+    #[allow(unused)]
     model: String,
     choices: Vec<VLlmChoice>,
+    #[allow(unused)]
     usage: VLlmUsage,
 }
 
@@ -78,16 +87,22 @@ struct VLlmCompletionResponse {
 #[derive(Debug, Deserialize)]
 struct VLlmChoice {
     text: String,
+    #[allow(unused)]
     index: u32,
+    #[allow(unused)]
     logprobs: Option<serde_json::Value>,
+    #[allow(unused)]
     finish_reason: Option<String>,
 }
 
 /// vLLM usage statistics
 #[derive(Debug, Deserialize)]
 struct VLlmUsage {
+    #[allow(unused)]
     prompt_tokens: u32,
+    #[allow(unused)]
     completion_tokens: u32,
+    #[allow(unused)]
     total_tokens: u32,
 }
 
@@ -118,19 +133,25 @@ struct VLlmMessage {
 /// vLLM chat completion response
 #[derive(Debug, Deserialize)]
 struct VLlmChatResponse {
+    #[allow(unused)]
     id: String,
+    #[allow(unused)]
     object: String,
+    #[allow(unused)]
     created: u64,
     model: String,
     choices: Vec<VLlmChatChoice>,
+    #[allow(unused)]
     usage: VLlmUsage,
 }
 
 /// vLLM chat choice
 #[derive(Debug, Deserialize)]
 struct VLlmChatChoice {
+    #[allow(unused)]
     index: u32,
     message: VLlmMessage,
+    #[allow(unused)]
     finish_reason: Option<String>,
 }
 
@@ -206,6 +227,7 @@ impl VLlmAdapter {
     }
 
     /// Check if streaming is supported and requested
+    #[allow(unused)]
     fn should_stream(&self, request_params: &serde_json::Map<String, serde_json::Value>) -> bool {
         request_params.get("stream")
             .and_then(|v| v.as_bool())

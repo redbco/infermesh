@@ -14,6 +14,7 @@ use tracing::{debug, info, warn};
 /// State Plane service implementation
 #[derive(Debug, Clone)]
 pub struct StatePlaneService {
+    #[allow(unused)]
     config: AgentConfig,
     metrics_registry: MetricsRegistry,
     // In a real implementation, these would be backed by persistent storage

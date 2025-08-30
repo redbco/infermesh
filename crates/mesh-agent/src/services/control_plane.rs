@@ -11,8 +11,8 @@ use mesh_proto::control::v1::{
     PinModelRequest, PinModelResponse, UnloadModelRequest, UnloadModelResponse,
     UnpinModelRequest, UnpinModelResponse, Node, NodeRole, NodeStatus,
     ListModelsRequest, ListModelsResponse, SetPolicyRequest, SetPolicyResponse,
-    GetPolicyRequest, GetPolicyResponse, DeletePolicyRequest, DeletePolicyResponse,
-    ListPoliciesRequest, ListPoliciesResponse, SubscribeEventsRequest, Event,
+    //GetPolicyRequest, GetPolicyResponse, DeletePolicyRequest, DeletePolicyResponse,
+    //ListPoliciesRequest, ListPoliciesResponse, SubscribeEventsRequest, Event,
 };
 use std::collections::HashMap;
 use tonic::{Request, Response, Status};
@@ -21,13 +21,16 @@ use tracing::{debug, info, warn};
 /// Control Plane service implementation
 #[derive(Clone)]
 pub struct ControlPlaneService {
+    #[allow(unused)]
     config: AgentConfig,
+    #[allow(unused)]
     metrics_registry: MetricsRegistry,
     // In a real implementation, these would be backed by persistent storage
     nodes: std::sync::Arc<tokio::sync::RwLock<HashMap<String, Node>>>,
     // State plane service for accessing model and GPU state
     state_plane: StatePlaneService,
     // Raft node for distributed consensus (optional for now)
+    #[allow(unused)]
     raft_node: Option<std::sync::Arc<RaftNode>>,
     // In-memory policy storage (will be replaced with raft persistence)
     policies: std::sync::Arc<tokio::sync::RwLock<HashMap<String, Policy>>>,
@@ -282,7 +285,7 @@ impl ControlPlane for ControlPlaneService {
     ) -> std::result::Result<Response<ListModelsResponse>, Status> {
         debug!("Received ListModels request: {:?}", request);
         
-        let req = request.into_inner();
+        let _req = request.into_inner();
         
         // Get model states from the state plane
         let model_states = self.state_plane.get_model_states().read().await;
@@ -324,7 +327,7 @@ impl ControlPlane for ControlPlaneService {
         let req = request.into_inner();
         
         // For now, just create a simple policy based on the protobuf policy field
-        if let Some(policy_proto) = req.policy {
+        if let Some(_policy_proto) = req.policy {
             // Create a basic policy ID from the policy name
             let policy_id = format!("policy_{}", uuid::Uuid::new_v4().simple());
             

@@ -77,6 +77,8 @@ tempfile = { workspace = true }
 default = []
 # Enable development/testing features
 # dev = ["dep:mesh-dev"] # Temporarily disabled
+opentelemetry = []
+
 
 [[bin]]
 name = "meshd"

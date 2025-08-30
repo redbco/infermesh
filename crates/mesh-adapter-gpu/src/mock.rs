@@ -3,13 +3,15 @@
 use crate::config::GpuMonitorConfig;
 use crate::monitor::GpuMonitorTrait;
 use crate::metrics::*;
-use crate::health::{GpuHealth, HealthStatus};
+use crate::health::{GpuHealth, 
+    //HealthStatus
+};
 use crate::{Result, GpuError};
 
 use async_trait::async_trait;
 use std::collections::HashMap;
 use std::sync::Arc;
-use std::time::SystemTime;
+//use std::time::SystemTime;
 use tokio::sync::RwLock;
 use tracing::{debug, info};
 

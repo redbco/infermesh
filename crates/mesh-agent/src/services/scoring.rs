@@ -15,6 +15,7 @@ use tracing::{debug, info, warn};
 /// Scoring service implementation
 #[derive(Debug, Clone)]
 pub struct ScoringService {
+    #[allow(unused)]
     config: AgentConfig,
     metrics_registry: MetricsRegistry,
     // In a real implementation, these would track active requests and admission tokens
@@ -23,11 +24,15 @@ pub struct ScoringService {
 
 #[derive(Debug, Clone)]
 struct AdmissionRecord {
+    #[allow(unused)]
     request_id: String,
     admission_token: String,
     target_node: String,
+    #[allow(unused)]
     target_gpu: String,
+    #[allow(unused)]
     admitted_at: chrono::DateTime<chrono::Utc>,
+    #[allow(unused)]
     estimated_tokens: u32,
 }
 

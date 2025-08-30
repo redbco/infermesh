@@ -1,14 +1,14 @@
 //! Adapter manager service for integrating runtime and GPU adapters
 
-use crate::config::{AdapterConfig, RuntimeInstanceConfig, GpuInstanceConfig};
+use crate::config::AdapterConfig;
 use crate::services::StatePlaneService;
 use mesh_adapter_runtime::{RuntimeAdapter, RuntimeAdapterTrait, RuntimeConfig, RuntimeType};
-use mesh_adapter_runtime::vllm::VLlmAdapter;
-use mesh_adapter_runtime::triton::TritonAdapter;
-use mesh_adapter_runtime::tgi::TgiAdapter;
+//use mesh_adapter_runtime::vllm::VLlmAdapter;
+//use mesh_adapter_runtime::triton::TritonAdapter;
+//use mesh_adapter_runtime::tgi::TgiAdapter;
 use mesh_adapter_gpu::{GpuMonitor, GpuMonitorTrait, GpuMonitorConfig, GpuBackend};
-use mesh_adapter_gpu::nvml::NvmlMonitor;
-use mesh_adapter_gpu::dcgm::DcgmMonitor;
+//use mesh_adapter_gpu::nvml::NvmlMonitor;
+//use mesh_adapter_gpu::dcgm::DcgmMonitor;
 use mesh_adapter_gpu::metrics::ThermalState;
 use mesh_metrics::MetricsRegistry;
 use mesh_proto::state::v1::{ModelStateDelta, GpuStateDelta, Labels};
@@ -17,13 +17,14 @@ use std::collections::HashMap;
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::RwLock;
-use tokio::time::{interval, Interval};
-use tracing::{debug, error, info, warn};
+use tokio::time::{interval};
+use tracing::{debug, info, warn};
 
 /// Adapter manager handles runtime and GPU adapters
 #[derive(Clone)]
 pub struct AdapterManager {
     config: AdapterConfig,
+    #[allow(unused)]
     metrics_registry: MetricsRegistry,
     runtime_adapters: Arc<RwLock<HashMap<String, Arc<RuntimeAdapter>>>>,
     gpu_adapters: Arc<RwLock<HashMap<String, Arc<GpuMonitor>>>>,

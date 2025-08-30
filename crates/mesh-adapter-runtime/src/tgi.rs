@@ -24,6 +24,7 @@ pub struct TgiAdapter {
 /// TGI health response
 #[derive(Debug, Deserialize)]
 struct TgiHealthResponse {
+    #[allow(unused)]
     status: String,
 }
 
@@ -34,18 +35,27 @@ struct TgiInfoResponse {
     model_sha: Option<String>,
     model_dtype: String,
     model_device_type: String,
+    #[allow(unused)]
     model_pipeline_tag: Option<String>,
     max_concurrent_requests: u32,
+    #[allow(unused)]
     max_best_of: u32,
+    #[allow(unused)]
     max_stop_sequences: u32,
     max_input_length: u32,
     max_total_tokens: u32,
+    #[allow(unused)]
     waiting_served_ratio: f32,
+    #[allow(unused)]
     max_batch_total_tokens: u32,
+    #[allow(unused)]
     max_waiting_tokens: u32,
+    #[allow(unused)]
     validation_workers: u32,
     version: String,
+    #[allow(unused)]
     sha: Option<String>,
+    #[allow(unused)]
     docker_label: Option<String>,
 }
 
@@ -92,6 +102,7 @@ struct TgiGenerationDetails {
     seed: Option<u64>,
     prefill: Vec<TgiPrefillToken>,
     tokens: Vec<TgiToken>,
+    #[allow(unused)]
     best_of_sequences: Option<Vec<TgiSequence>>,
 }
 
@@ -128,6 +139,7 @@ struct TgiSequence {
 struct TgiMetricsResponse {
     // TGI exposes Prometheus metrics, we'd parse them here
     // For now, we'll use a simple string representation
+    #[allow(unused)]
     metrics: String,
 }
 

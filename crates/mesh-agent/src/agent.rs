@@ -469,13 +469,13 @@ impl AgentBuilder {
         }
 
         // Add OpenTelemetry exporter if enabled
-        #[cfg(feature = "opentelemetry")]
-        if config.services.metrics.opentelemetry.enabled {
-            if let Some(ref endpoint) = config.services.metrics.opentelemetry.otlp_endpoint {
-                let otel_exporter = mesh_metrics::opentelemetry_metrics::OpenTelemetryExporter::new(endpoint)?;
-                metrics_builder = metrics_builder.with_opentelemetry_exporter(otel_exporter);
-            }
-        }
+        //#[cfg(feature = "opentelemetry")]
+        //if config.services.metrics.opentelemetry.enabled {
+        //    if let Some(ref endpoint) = config.services.metrics.opentelemetry.otlp_endpoint {
+        //        let otel_exporter = mesh_metrics::opentelemetry_metrics::OpenTelemetryExporter::new(endpoint)?;
+        //        metrics_builder = metrics_builder.with_opentelemetry_exporter(otel_exporter);
+        //    }
+        //}
 
         let metrics_registry = metrics_builder.build()?;
 

@@ -26,6 +26,7 @@ pub struct TritonAdapter {
 struct TritonServerMetadata {
     name: String,
     version: String,
+    #[allow(unused)]
     extensions: Vec<String>,
 }
 
@@ -33,7 +34,9 @@ struct TritonServerMetadata {
 #[derive(Debug, Deserialize)]
 struct TritonModelMetadata {
     name: String,
+    #[allow(unused)]
     versions: Option<Vec<String>>,
+    #[allow(unused)]
     platform: String,
     inputs: Vec<TritonTensorMetadata>,
     outputs: Vec<TritonTensorMetadata>,
@@ -50,6 +53,7 @@ struct TritonTensorMetadata {
 /// Triton model status response
 #[derive(Debug, Deserialize)]
 struct TritonModelStatus {
+    #[allow(unused)]
     name: String,
     version: Option<String>,
     state: String,
@@ -88,6 +92,7 @@ struct TritonInferenceResponse {
     model_name: String,
     model_version: Option<String>,
     outputs: Vec<TritonOutputTensor>,
+    #[allow(unused)]
     parameters: Option<HashMap<String, serde_json::Value>>,
 }
 

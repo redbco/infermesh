@@ -159,7 +159,7 @@ async fn stop_agent(pid_file: Option<PathBuf>) -> Result<()> {
     // Send SIGTERM to the process
     #[cfg(unix)]
     {
-        use nix::sys::signal::{self, Signal};
+        use nix::sys::signal::{self};
         use nix::unistd::Pid;
         
         match signal::kill(Pid::from_raw(pid as i32), nix::sys::signal::Signal::SIGTERM) {
@@ -213,7 +213,7 @@ async fn check_status(pid_file: Option<PathBuf>) -> Result<()> {
     // Check if process is running
     #[cfg(unix)]
     {
-        use nix::sys::signal::{self, Signal};
+        use nix::sys::signal::{self};
         use nix::unistd::Pid;
         
         match signal::kill(Pid::from_raw(pid as i32), None) {

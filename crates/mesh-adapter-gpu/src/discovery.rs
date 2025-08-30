@@ -1,7 +1,11 @@
 //! GPU discovery and topology
 
-use crate::metrics::{GpuInfo, PciInfo, GpuCapabilities};
-use crate::{Result, GpuError};
+use crate::metrics::{GpuInfo, 
+    //PciInfo, GpuCapabilities
+};
+use crate::{Result, 
+    //GpuError
+};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 

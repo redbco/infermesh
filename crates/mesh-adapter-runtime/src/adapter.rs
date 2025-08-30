@@ -161,8 +161,8 @@ impl RuntimeAdapter {
 
         // Start health checking
         if self.config.health_check.interval > std::time::Duration::from_secs(0) {
-            let health_checker = Arc::clone(&self.health_checker);
-            let adapter = self.inner.as_ref();
+            let _health_checker = Arc::clone(&self.health_checker);
+            let _adapter = self.inner.as_ref();
             
             // Note: In a real implementation, this would spawn a background task
             // For now, we'll just log that it would start
@@ -171,7 +171,7 @@ impl RuntimeAdapter {
 
         // Start metrics collection
         if self.config.metrics.enabled {
-            let metric_collector = Arc::clone(&self.metric_collector);
+            let _metric_collector = Arc::clone(&self.metric_collector);
             
             // Note: In a real implementation, this would spawn a background task
             debug!("Would start metrics collection task with interval {:?}", self.config.metrics.interval);
@@ -310,7 +310,7 @@ impl Default for ResponseMetadata {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::config::RuntimeType;
+    //use crate::config::RuntimeType;
 
     #[test]
     fn test_model_status() {

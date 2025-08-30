@@ -268,7 +268,7 @@ impl ProcessManager {
         tokio::time::sleep(Duration::from_millis(500)).await;
         
         // Check if process is still running
-        if let Some(child) = &self.child {
+        if let Some(_child) = &self.child {
             // In a real implementation, we'd check child.try_wait() here
             // For now, assume success
             Ok(())
@@ -298,7 +298,7 @@ impl Drop for ProcessManager {
 mod tests {
     use super::*;
     use std::collections::HashMap;
-    use std::path::PathBuf;
+    //use std::path::PathBuf;
 
     fn create_test_config() -> ProcessConfig {
         ProcessConfig {
@@ -332,7 +332,7 @@ mod tests {
         assert_eq!(manager.status(), ProcessStatus::NotStarted);
         
         // Start process (echo command should exit quickly)
-        let result = manager.start().await;
+        let _result = manager.start().await;
         // Note: echo command exits immediately, so this might fail or succeed
         // depending on timing. In a real test, we'd use a long-running command.
         

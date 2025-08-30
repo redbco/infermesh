@@ -8,13 +8,14 @@ use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::RwLock;
 use tokio::time::interval;
-use tracing::{debug, info, warn};
+use tracing::{info, warn};
 
 /// State synchronization service that bridges adapters and state plane
 pub struct StateSyncService {
     adapter_manager: Option<Arc<AdapterManager>>,
     state_plane: Option<Arc<StatePlaneService>>,
     state_store: Arc<StateStore>,
+    #[allow(unused)]
     state_synchronizer: Arc<StateSynchronizer>,
     node_id: NodeId,
     sync_interval: Duration,

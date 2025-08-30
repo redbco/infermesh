@@ -4,7 +4,7 @@ use crate::config::MetricsConfig;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::atomic::{AtomicU64, Ordering};
-use std::time::{Duration, Instant};
+use std::time::{Instant};
 
 /// Runtime metrics collected from adapters
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -239,7 +239,7 @@ impl MetricCollector {
     }
 
     /// Record a successful request
-    pub fn record_request_success(&self, duration_ms: f64) {
+    pub fn record_request_success(&self, _duration_ms: f64) {
         self.total_requests.fetch_add(1, Ordering::Relaxed);
         self.successful_requests.fetch_add(1, Ordering::Relaxed);
         
@@ -248,7 +248,7 @@ impl MetricCollector {
     }
 
     /// Record a failed request
-    pub fn record_request_failure(&self, duration_ms: f64) {
+    pub fn record_request_failure(&self, _duration_ms: f64) {
         self.total_requests.fetch_add(1, Ordering::Relaxed);
         self.failed_requests.fetch_add(1, Ordering::Relaxed);
     }

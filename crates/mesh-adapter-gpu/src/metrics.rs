@@ -1,7 +1,7 @@
 //! GPU metrics and telemetry data structures
 
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+//use std::collections::HashMap;
 use std::time::{Duration, SystemTime};
 
 /// Complete GPU metrics for a single GPU
