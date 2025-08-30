@@ -1,78 +1,94 @@
 # InferMesh
 
-**InferMesh** is a **GPU-aware inference mesh** designed for large-scale AI serving.  
-It provides a distributed control plane, GPU- and network-aware routing, and standardized observability across heterogeneous environments.
+**InferMesh** is a **GPU- and network-aware mesh** for large-scale **AI serving and training**.  
+It provides a distributed control plane, topology- and GPU-aware routing, and standardized observability across heterogeneous environments.
+
+---
+
+## 💡 Why InferMesh is different?
+
+InferMesh treats inference and training as first-class citizens on a single mesh fabric: a topology-aware underlay (gossip, Raft, secure networking, link coordinates) with a workload overlay (routers, schedulers, adapters) and a pluggable strategy host. Unlike point tools (serving frameworks, trainers, or generic service meshes), it makes GPU, runtime, and network signals actionable in real time for both request routing and collective topology, and lets you swap in user-defined strategies (Rust or WASM) that run under strict latency budgets with built-in A/B and observability. It scales across clusters and regions with cell summaries, supports edge-to-cloud paths, and optimizes for SLOs, utilization, and cost—all through one consistent API and label model.
 
 ---
 
 ## ✨ What is InferMesh?
 
-Modern AI inference at scale faces three hard problems:
+Modern AI at scale faces three hard problems:
 
-1. **Observability** – understanding GPU health, utilization, queue depths, and tail latency across a large fleet.
-2. **Load Balancing** – achieving even distribution of work across GPUs to prevent hotspots and maximize throughput.
-3. **Cost Optimization** – minimizing cost per inference while maintaining SLAs through intelligent routing and resource allocation.
+1. **Observability** – understanding GPU health, utilization, queue depths, collective timings, and tail latency across a large fleet.  
+2. **Placement & Routing** – sending the right work to the right resources (inference requests *and* training collectives) while accounting for network cost and GPU pressure.  
+3. **Cost & Reliability** – minimizing cost per token/step and reducing failure blast-radius without breaking SLAs.
 
-**InferMesh** solves this by introducing a *mesh abstraction layer* above Kubernetes, Slurm, VMs, or bare metal.  
-It coordinates nodes, routes requests based on live GPU + network state, and exposes a distributed API for control and monitoring. Advanced routing strategies deliver **2-3x better latency** while achieving **50% lower costs** compared to baseline approaches.
+**InferMesh** solves this by introducing a **two-layer architecture** with **three planes**:
+
+- **Infrastructure Layer (Underlay)** – the mesh fabric: gossip, consensus, topology awareness, secure networking, node identity/lifecycle.  
+- **Workload Overlay Layer** – connectors and integrations for inference runtimes and training frameworks, plus the **pluggable strategy host** for routing/topology decisions.
+
+- **Planes** (cross-cutting):  
+  - **Communication/Data Plane** – inference request forwarding & streaming; training collectives (all-reduce/all-gather).  
+  - **Signal Plane** – runtime + GPU + network telemetry fused into a local scoring/topology API.  
+  - **Control Plane** – policies, placements, quotas, job specs, events, and RBAC.
+
+Advanced strategies (e.g., **`hybrid_mesh`**) have shown **~2× better latency** and **~40–50% lower cost per 1k tokens** compared to baseline round-robin in simulation (512-node runs). Results vary by workload and topology.
 
 ---
 
 ## 🎯 Who is this for?
 
-**InferMesh** is targeted at organizations and teams that run **AI inference at meaningful scale** and face challenges in GPU efficiency, reliability, and observability. Typical users include:
+Teams operating **meaningful-scale AI** where utilization, latency, and reliability matter:
 
-- **AI infrastructure teams** running fleets of hundreds or thousands of GPUs who need better utilization and reduced cost per inference.  
-- **Cloud providers and platform teams** offering inference services and wanting to integrate multi-tenant, GPU-aware routing.  
-- **Enterprises** deploying private or hybrid AI inference clusters with strict SLAs and compliance requirements.  
-- **Research labs** coordinating shared GPU clusters across regions or institutions, needing fair scheduling and transparency.  
-- **Startups scaling inference-heavy products** (chatbots, copilots, speech/image services) who need production-grade observability and routing without reinventing infra.  
+- **Inference platforms** serving LLMs, vision, ASR across hundreds–thousands of GPUs, multi-zone/region, or hybrid edge + cloud.  
+- **Training platforms** running distributed jobs (PyTorch DDP, DeepSpeed, Megatron) that need topology-aware collectives and elastic placement across heterogeneous interconnects.  
+- **Cloud & platform providers** building multi-tenant AI services with GPU-aware routing and consistent observability.  
+- **Enterprises & research labs** coordinating shared GPU fleets with strict SLOs, quotas, and auditability.
 
-If you are running **<100 GPUs in a single cluster**, Kubernetes or Triton alone may be sufficient.  
-If you are scaling **>500 GPUs across multiple clusters/regions**, infermesh delivers outsized ROI by improving utilization, simplifying management, and reducing operational overhead.
+If you’re <100 GPUs in a single cluster, Triton or K8s-only may suffice. Above ~500 GPUs or across multiple regions, **InferMesh** delivers outsized ROI by improving utilization, cutting tail latency, and simplifying operations.
+
+---
+
+## 🧭 Use Cases & Benefits
+
+### Inference (Serving)
+- **Low latency at scale**: GPU-aware + network-aware routing, queue-depth and VRAM signals, hedging for tight SLAs.  
+- **Higher utilization**: smarter packing (MIG/MPS aware), reduced hotspots, fewer cold starts.  
+- **Cost efficiency**: steer to lower-cost capacity when SLOs allow; throttle or quarantine unhealthy nodes.  
+- **Edge + cloud**: route locally when possible, account for WAN penalties when not.
+
+### Training (Distributed Jobs)
+- **Topology-aware collectives**: per-step hints (ring/tree/hierarchical), dynamic fusion windows, and congestion-aware paths.  
+- **Elastic placement**: schedule across heterogeneous nodes and interconnects; scale in/out with policy.  
+- **Resilience**: detect link/GPU degradation (DCGM) and adjust topology; reduce restarts via quarantine and rebalancing.  
+- **Multi-cluster readiness**: WAN-aware link coordinates and summaries for cross-cell planning.
 
 ---
 
 ## 🔧 Core Features
 
-- **GPU-aware routing**  
-  Routes requests using live signals: batch fullness, queue depth, VRAM headroom, MIG/MPS profile, and network cost.
+- **Unified mesh fabric (underlay)**  
+  Gossip membership (SWIM), Raft-backed policy store, topology service (coordinates & link classes), secure transport (mTLS/QUIC), node identity & lifecycle.
 
-- **Distributed control plane**  
-  Each node runs a `meshd` agent for membership, state gossip, and Raft-based consensus for policies/placements.
+- **Workload overlay**  
+  - **Inference Router** – HTTP/2 gRPC/HTTP/WS ingress with admission control and hedging.  
+  - **Training Scheduler** – placement, topology hints, and elasticity for distributed jobs.  
+  - **Adapters** – Runtime (Triton, vLLM, TGI, TorchServe, TF/OVMS), Comm (NCCL/UCC telemetry), GPU (DCGM/NVML/ROCm-SMI), IO (datasets/checkpoints).
 
-- **Flexible node roles**  
-  - **Router Nodes** – accept inference traffic, make routing decisions.  
-  - **GPU Nodes** – run runtimes (Triton, vLLM, TGI, TorchServe, …) + GPU telemetry.  
-  - **Edge Nodes** – optional ingress points colocated with users.  
+- **Pluggable strategies (inference + training)**  
+  A **strategy host** loads built-in and user-defined strategies (Rust `cdylib` or sandboxed WASM).  
+  - *Inference outputs*: ranked targets, hedges, admission decisions.  
+  - *Training outputs*: placement plans, collective topology hints, fusion/compression toggles.  
+  The same interface powers internal strategies like **`hybrid_mesh`**.
 
 - **Observability built-in**  
-  - Prometheus metrics for queue depths, latency, throughput, GPU stats.  
-  - OpenTelemetry tracing for end-to-end request visibility.  
-  - Consistent labels across runtimes and GPUs.
-
-- **Pluggable runtimes**  
-  **Production-ready adapters**: Triton, vLLM, TGI with comprehensive HTTP/gRPC integration.  
-  **Framework ready**: TorchServe, TF Serving, OVMS adapters with extensible architecture.  
-  Standardizes runtime metrics + model control into a uniform contract.
-
-- **GPU telemetry**  
-  **NVML adapter**: Complete GPU monitoring with utilization, memory, temperature, and power metrics.  
-  **DCGM adapter**: Enterprise-grade GPU monitoring with comprehensive field group support.  
-  **ROCm support**: Framework ready for AMD GPU integration.
-
-- **Network-aware scaling**  
-  Accounts for WAN latency/bandwidth when routing across regions or edge sites.
+  Prometheus metrics and OpenTelemetry traces for routers, schedulers, agents, and adapters; consistent labels across GPUs/runtimes/jobs.
 
 ---
 
 ## 📐 Architecture Overview
 
-The mesh consists of three cooperating layers:
-
-- **Data Plane** – routers forward inference requests to the best target GPU node.  
-- **Signal Plane** – agents collect runtime and GPU metrics, gossip them, and provide a local scoring API.  
-- **Control Plane** – strongly consistent policies (model pinning, SLO classes, quotas) managed via Raft and exposed as a gRPC/HTTP API.
+- **Two layers**: Infrastructure (mesh fabric) and Workload Overlay (routers, schedulers, adapters, strategy host).  
+- **Three planes**: Communication/Data, Signal, Control.  
+- **Security**: mTLS everywhere, SPIFFE-compatible identities, RBAC via OIDC/JWT.  
+- **Scalability**: cell/shard design with inter-cell summaries; interest-scoped dissemination to reduce chatter.
 
 Read more in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
