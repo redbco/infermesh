@@ -36,40 +36,54 @@ flowchart TB
   %% Overlay Layer
   subgraph Overlay["Workload Overlay Layer"]
     direction TB
-    R[Inference Router<br/>HTTP/2 gRPC, HTTP, WS/SSE]:::overlay
-    SCHED[Training Scheduler<br/>Job API (gRPC/HTTP)]:::overlay
-    STRAT[Strategy Host (Inference + Training)<br/>plugins: cdylib/wasm]:::overlay
+    R["Inference Router
+    HTTP/2 gRPC, HTTP, WS/SSE"]:::overlay
+    SCHED["Training Scheduler
+    Job API (gRPC/HTTP)"]:::overlay
+    STRAT["Strategy Host (Inference + Training)
+    plugins: cdylib/wasm"]:::overlay
 
     subgraph Adapters["Adapters & Connectors"]
       direction LR
-      RTAD[Runtime Adapter<br/>Triton/vLLM/TGI/TorchServe/TF/OVMS]:::overlay
-      COMMAD[Comm Adapter<br/>NCCL/UCC telemetry]:::overlay
-      GPUAD[GPU Adapter<br/>DCGM/NVML/ROCm-SMI]:::overlay
-      IOAD[IO Adapter<br/>Datasets/Checkpoint stores]:::overlay
+      RTAD["Runtime Adapter
+      Triton/vLLM/TGI/TorchServe/TF/OVMS"]:::overlay
+      COMMAD["Comm Adapter
+      NCCL/UCC telemetry"]:::overlay
+      GPUAD["GPU Adapter
+      DCGM/NVML/ROCm-SMI"]:::overlay
+      IOAD["IO Adapter
+      Datasets/Checkpoint stores"]:::overlay
     end
   end
 
   %% Infrastructure Layer
   subgraph Underlay["Infrastructure Layer (Mesh Fabric)"]
-    AG[Mesh Agent (meshd)<br/>state fusion + scoring API]:::underlay
-    G[Membership & Gossip (SWIM)]:::underlay
-    RF[Consensus (Raft groups)]:::underlay
-    TOPO[Topology Service<br/>link coords, RTT, WAN-awareness]:::underlay
-    NET[Secure Networking<br/>mTLS, QUIC, pools]:::underlay
-    NM[Node Manager<br/>identity, certs, drain/cordon]:::underlay
-    POL[Policy Store<br/>placements, quotas, SLOs]:::underlay
+    AG["Mesh Agent (meshd)
+    state fusion + scoring API"]:::underlay
+    G["Membership & Gossip (SWIM)"]:::underlay
+    RF["Consensus (Raft groups)"]:::underlay
+    TOPO["Topology Service
+    link coords, RTT, WAN-awareness"]:::underlay
+    NET["Secure Networking
+    mTLS, QUIC, pools"]:::underlay
+    NM["Node Manager
+    identity, certs, drain/cordon"]:::underlay
+    POL["Policy Store
+    placements, quotas, SLOs"]:::underlay
   end
 
   %% Execution / External
   subgraph Exec["Execution & External Systems"]
-    TRT[Inference Runtimes<br/>Triton / vLLM / TGI / TorchServe / TF Serving]:::edge
-    TRN[Training Runtimes<br/>PyTorch DDP / DeepSpeed / Megatron]:::edge
-    NCCL[(Collectives: NCCL/UCC/UCP)]:::edge
-    GPU[GPUs + MIG/MPS]:::edge
-    DS[(Datasets / Feature Store)]:::ext
-    CKPT[(Checkpoint Store: S3/GCS/NFS)]:::ext
-    OBS[(Prometheus / Grafana)]:::ext
-    OTel[(OpenTelemetry Collector)]:::ext
+    TRT["Inference Runtimes
+    Triton / vLLM / TGI / TorchServe / TF Serving"]:::edge
+    TRN["Training Runtimes
+    PyTorch DDP / DeepSpeed / Megatron"]:::edge
+    NCCL[("Collectives: NCCL/UCC/UCP")]:::edge
+    GPU["GPUs + MIG/MPS"]:::edge
+    DS[("Datasets / Feature Store")]:::ext
+    CKPT[("Checkpoint Store: S3/GCS/NFS")]:::ext
+    OBS[("Prometheus / Grafana")]:::ext
+    OTel[("OpenTelemetry Collector")]:::ext
   end
 
   %% Overlay <-> Underlay
