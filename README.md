@@ -500,6 +500,8 @@ Contributions are welcome! Please read:
 
 We use GitHub Issues + Discussions for bugs, features, and design proposals.
 
+- Discord: [Join us](https://discord.gg/tymvhngKxB)
+
 ## 📜 License
 
 **InferMesh** is available under a **dual-license model**:
